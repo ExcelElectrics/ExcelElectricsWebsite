@@ -33,3 +33,5 @@ Next step after final logo pack arrives
 - Confirm exact HEX values from source PDF/assets.
 - Align global tokens in src/app/globals.css to this palette.
 - Audit component-level hardcoded colours and map to tokens.
+
+Favicons saved in public
