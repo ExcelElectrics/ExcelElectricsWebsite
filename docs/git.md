@@ -7,5 +7,5 @@ new prod repo:
 
 git checkout -b excelelectricschanges
 git add .
-git commit -m "docs: update branding notes"
+git commit -m "docs: update socials"
 git push -u excelclient excelelectricschanges
