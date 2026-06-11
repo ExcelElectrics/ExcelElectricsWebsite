@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-// import Script from "next/script"; // re-enable when the AI chatbot goes back in
+import Script from "next/script";
 import { DesktopNavbar } from "@/components/Navigation/DesktopNavbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/Navigation/MobileNavbar/MobileNavbar";
 import { ComingSoonScreen } from "@/components/ComingSoon/ComingSoonScreen";
@@ -128,12 +128,11 @@ export default function RootLayout({
             </>
           )}
         </ThemeProvider>
-        {/* AI chatbot temporarily disabled until it's finished - re-enable with the Script import above
         <Script
           src="https://app.centrus.ai/embed/custom-chatbot.js"
           data-chatbot-id="d559aaa9-a68c-48e3-9063-39a8547405fe"
           strategy="afterInteractive"
-        /> */}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
