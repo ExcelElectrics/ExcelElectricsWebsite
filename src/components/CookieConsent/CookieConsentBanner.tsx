@@ -2,38 +2,27 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+  COOKIE_CONSENT_ACCEPTED,
+  COOKIE_CONSENT_ESSENTIAL_ONLY,
+  hasStoredConsentChoice,
+  setStoredConsent,
+  type CookieConsentValue,
+} from "@/components/CookieConsent/cookieConsent";
 
-const STORAGE_KEY = "excelelectrics_cookie_consent_v1";
-
-/** All cookies including analytics (use when loading non-essential scripts). */
-export const COOKIE_CONSENT_ACCEPTED = "accepted";
-/** Essential cookies only; do not load optional analytics or marketing cookies. */
-export const COOKIE_CONSENT_ESSENTIAL_ONLY = "essential_only";
-
-function hasStoredChoice(): boolean {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY);
-    return v === COOKIE_CONSENT_ACCEPTED || v === COOKIE_CONSENT_ESSENTIAL_ONLY;
-  } catch {
-    return false;
-  }
-}
+export { COOKIE_CONSENT_ACCEPTED, COOKIE_CONSENT_ESSENTIAL_ONLY } from "@/components/CookieConsent/cookieConsent";
 
 export function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (hasStoredChoice()) return;
+    if (hasStoredConsentChoice()) return;
     const timer = window.setTimeout(() => setVisible(true), 0);
     return () => window.clearTimeout(timer);
   }, []);
 
-  const dismiss = (value: typeof COOKIE_CONSENT_ACCEPTED | typeof COOKIE_CONSENT_ESSENTIAL_ONLY) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, value);
-    } catch {
-      /* ignore */
-    }
+  const dismiss = (value: CookieConsentValue) => {
+    setStoredConsent(value);
     setVisible(false);
   };
 
@@ -61,7 +50,8 @@ export function CookieConsentBanner() {
               Cookie policy
             </Link>
             {" "}
-            - including those needed for the site to work and any analytics we list there.             Choose <strong className="font-semibold text-foreground">Accept</strong> for the full experience, or{" "}
+            — including those needed for the site to work and optional analytics such as Google Analytics. Choose{" "}
+            <strong className="font-semibold text-foreground">Accept</strong> to allow analytics cookies, or{" "}
             <strong className="font-semibold text-foreground">Essential only</strong> to use necessary cookies only.
           </p>
         </div>
