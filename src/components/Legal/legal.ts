@@ -29,13 +29,14 @@ For questions, contact us at info@excelelectrics.com.`,
   {
     id: "privacy-policy",
     title: "Privacy Policy",
-    lastUpdated: "27/05/2026",
+    lastUpdated: "19/06/2026",
     markdown: `Excel Fire Ltd, trading as Excel Electrics, is committed to protecting your personal data and handling it responsibly.
 
 ### What we collect
 - Your name, email address, phone number, and any information you submit through contact forms.
 - Information you provide through the website chatbot, including conversation content and any details you choose to share.
 - Basic technical information, such as browser type, device information, pages viewed, approximate location derived from technical data, and security signals used to protect the website.
+- Where you accept analytics cookies, usage data collected through Google Analytics and Google Tag Manager to help us understand how the website is used and how our marketing performs.
 
 ### How we use your information
 - To respond to enquiries and provide electrical services.
@@ -43,11 +44,12 @@ For questions, contact us at info@excelelectrics.com.`,
 - To improve website performance and user experience.
 - To monitor and improve the website chatbot and help ensure it gives relevant, appropriate responses.
 - To protect the website and enquiry forms from spam, abuse, and automated submissions.
+- To measure website traffic and marketing performance where you have accepted analytics cookies.
 
 ### Data sharing
-We do not sell your personal data. We only share information with trusted providers where necessary to operate our business, respond to enquiries, run the website, provide chatbot functionality, protect forms from spam, or comply with legal obligations.
+We do not sell your personal data. We only share information with trusted providers where necessary to operate our business, respond to enquiries, run the website, provide chatbot functionality, protect forms from spam, measure website usage, or comply with legal obligations.
 
-These providers may include website hosting, email delivery, chatbot, analytics, and anti-spam/security services.
+These providers may include website hosting, email delivery, chatbot, analytics (including Google), and anti-spam/security services.
 
 ### Data retention
 We keep personal data only for as long as needed for operational, legal, contractual, security, and customer service purposes. Chatbot conversations and enquiry records may be reviewed to support customers, improve the service, and monitor quality.
@@ -59,23 +61,32 @@ You may request access, correction, or deletion of your personal data by contact
   {
     id: "cookie-policy",
     title: "Cookie Policy",
-    lastUpdated: "27/05/2026",
-    markdown: `This site uses cookies and similar technologies to ensure the website functions correctly, support security features, operate the chatbot, and understand usage trends.
+    lastUpdated: "19/06/2026",
+    markdown: `This site uses cookies and similar technologies to ensure the website functions correctly, support security features, operate the chatbot, and — where you consent — measure website usage.
 
-### What cookies are used
-- Essential cookies required for core site functionality.
-- Security and anti-spam technologies, such as form verification tools, used to help protect contact forms from automated abuse.
+### Essential cookies and technologies
+These are required for the site to work and do not require your consent:
+- Cookies and storage needed for core site functionality, such as theme preference and cookie consent choice.
+- Security and anti-spam technologies, including Cloudflare Turnstile, used to help protect contact forms from automated abuse.
 - Chatbot-related storage or cookies used to operate the live chat experience and maintain conversation context.
-- Analytics cookies that help us measure website usage and performance.
+
+### Analytics cookies (optional)
+If you choose **Accept** on our cookie banner, we load:
+- **Google Analytics 4 (GA4)** — helps us understand pages visited, traffic sources, and general website usage.
+- **Google Tag Manager (GTM)** — manages analytics and marketing tags on the site, including tags used for Google Ads measurement.
+
+These analytics tools may set cookies and collect usage information. They are provided by Google and may process data outside the UK. We only load them after you accept analytics cookies.
+
+If you choose **Essential only**, analytics cookies are not loaded.
 
 ### How we use cookies
 - To maintain secure, reliable website operation.
 - To support contact form protection and reduce spam submissions.
 - To provide chatbot functionality and improve the customer support experience.
-- To review anonymised traffic data and improve content and services.
+- To review traffic data and improve content, services, and marketing where you have accepted analytics cookies.
 
 ### Managing cookies
-You can manage or disable cookies through your browser settings. Disabling some cookies may affect parts of the website functionality.
+You can change your choice at any time by clearing site data for this website in your browser and revisiting the site to see the cookie banner again. You can also manage or disable cookies through your browser settings. Disabling essential cookies may affect parts of the website functionality.
 
 For questions about cookies or personal data, please contact info@excelelectrics.com.
 `,

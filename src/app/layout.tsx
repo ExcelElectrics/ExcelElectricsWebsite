@@ -7,6 +7,7 @@ import { ComingSoonScreen } from "@/components/ComingSoon/ComingSoonScreen";
 import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import { SiteFooter } from "@/components/Footer/SiteFooter";
 import { CookieConsentBanner } from "@/components/CookieConsent/CookieConsentBanner";
+import { GoogleTags } from "@/components/Analytics/GoogleTags";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -115,6 +116,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <GoogleTags />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {isComingSoon ? (
             <ComingSoonScreen />
