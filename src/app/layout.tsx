@@ -94,10 +94,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/ExcelElectrics/FavIcons/excel-favicon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/ExcelElectrics/FavIcons/excel-favicon-48.png", sizes: "48x48", type: "image/png" },
       { url: "/ExcelElectrics/FavIcons/excel-favicon-purple.svg", type: "image/svg+xml" },
       { url: "/ExcelElectrics/FavIcons/excel-favicon-32.png", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/ExcelElectrics/FavIcons/excel-favicon-32.png",
+    shortcut: "/favicon.ico",
     apple: "/ExcelElectrics/FavIcons/excel-favicon-180.png",
   },
 };

@@ -2,7 +2,7 @@ new prod repo:
 
 git checkout -b excelelectricschanges
 git add .
-git commit -m "feat: excel GA 2, contact form changes"
+git commit -m "feat: excel GA preload, contact form service preffered contact, favicon"
 git push -u excelclient excelelectricschanges
 
 old jack repo:
