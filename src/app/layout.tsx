@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import { SiteFooter } from "@/components/Footer/SiteFooter";
 import { CookieConsentBanner } from "@/components/CookieConsent/CookieConsentBanner";
 import { GoogleTags } from "@/components/Analytics/GoogleTags";
+import { GOOGLE_CONSENT_DEFAULTS_SCRIPT } from "@/components/CookieConsent/googleConsentMode";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -93,10 +94,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/ExcelElectrics/FavIcons/excel-favicon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/ExcelElectrics/FavIcons/excel-favicon-48.png", sizes: "48x48", type: "image/png" },
       { url: "/ExcelElectrics/FavIcons/excel-favicon-purple.svg", type: "image/svg+xml" },
       { url: "/ExcelElectrics/FavIcons/excel-favicon-32.png", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/ExcelElectrics/FavIcons/excel-favicon-32.png",
+    shortcut: "/favicon.ico",
     apple: "/ExcelElectrics/FavIcons/excel-favicon-180.png",
   },
 };
@@ -116,6 +120,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: GOOGLE_CONSENT_DEFAULTS_SCRIPT.replace(/<\//g, "<\\/"),
+          }}
+        />
         <GoogleTags />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {isComingSoon ? (

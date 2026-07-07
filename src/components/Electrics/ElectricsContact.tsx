@@ -5,6 +5,11 @@ import { useMotionValue, useReducedMotion, useScroll, useTransform } from "motio
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { ElectricsSection } from "@/components/Electrics/ElectricsSection";
 import { LightningBolt } from "@/components/Electrics/LightningBolt";
+import {
+  ENQUIRY_PREFERRED_CONTACT,
+  ENQUIRY_SERVICES,
+  type EnquiryServiceValue,
+} from "@/components/Electrics/enquiryFormOptions";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -13,6 +18,8 @@ const labelClass =
 
 const inputClass =
   "w-full rounded-md border border-[var(--border)] bg-transparent px-3 py-2.5 text-sm text-foreground outline-none transition placeholder:text-[var(--text-muted)] focus:border-[#905bf4] focus:ring-2 focus:ring-[#905bf4]/25 focus:ring-offset-0";
+
+const selectClass = `${inputClass} cursor-pointer`;
 
 /** Muted blue → full blue on hover */
 const submitPrimaryBtn =
@@ -77,6 +84,8 @@ export function ElectricsContact() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [selectedService, setSelectedService] = useState<EnquiryServiceValue | "">("");
+  const [preferredContact, setPreferredContact] = useState("");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
@@ -163,9 +172,30 @@ export function ElectricsContact() {
     const name = String(formData.get("name") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
     const message = String(formData.get("message") ?? "").trim();
+    const service = String(formData.get("service") ?? "").trim();
+    const serviceOther = String(formData.get("serviceOther") ?? "").trim();
+    const preferredContact = String(formData.get("preferredContact") ?? "").trim();
 
     if (!name || !email || !message) {
       setErrorMessage("Please complete your name, email and message.");
+      setStatus("error");
+      return;
+    }
+
+    if (!service) {
+      setErrorMessage("Please select the service you are enquiring about.");
+      setStatus("error");
+      return;
+    }
+
+    if (service === "other" && !serviceOther) {
+      setErrorMessage("Please tell us which service you need under Other.");
+      setStatus("error");
+      return;
+    }
+
+    if (!preferredContact) {
+      setErrorMessage("Please select your preferred contact method.");
       setStatus("error");
       return;
     }
@@ -209,6 +239,8 @@ export function ElectricsContact() {
 
       form.reset();
       setFiles([]);
+      setSelectedService("");
+      setPreferredContact("");
       turnstileRef.current?.reset();
       setTurnstileToken("");
       setStatus("success");
@@ -334,6 +366,72 @@ export function ElectricsContact() {
                 />
               </div>
             </div>
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+              <div className="space-y-2">
+                <label htmlFor="enquiry-service" className={labelClass}>
+                  Service <span aria-hidden className="text-[#e03131]">*</span>
+                </label>
+                <select
+                  id="enquiry-service"
+                  name="service"
+                  required
+                  aria-required="true"
+                  value={selectedService}
+                  onChange={(event) =>
+                    setSelectedService(event.target.value as EnquiryServiceValue | "")
+                  }
+                  className={selectClass}
+                >
+                  <option value="" disabled>
+                    Select a service
+                  </option>
+                  {ENQUIRY_SERVICES.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="enquiry-preferred-contact" className={labelClass}>
+                  Preferred contact <span aria-hidden className="text-[#e03131]">*</span>
+                </label>
+                <select
+                  id="enquiry-preferred-contact"
+                  name="preferredContact"
+                  required
+                  aria-required="true"
+                  value={preferredContact}
+                  onChange={(event) => setPreferredContact(event.target.value)}
+                  className={selectClass}
+                >
+                  <option value="" disabled>
+                    How should we reply?
+                  </option>
+                  {ENQUIRY_PREFERRED_CONTACT.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {selectedService === "other" && (
+              <div className="space-y-2">
+                <label htmlFor="enquiry-service-other" className={labelClass}>
+                  Other service <span aria-hidden className="text-[#e03131]">*</span>
+                </label>
+                <input
+                  id="enquiry-service-other"
+                  name="serviceOther"
+                  type="text"
+                  required
+                  aria-required="true"
+                  className={inputClass}
+                  placeholder="Tell us what you need help with"
+                />
+              </div>
+            )}
             <div className="space-y-2">
               <label htmlFor="enquiry-message" className={labelClass}>
                 Message <span aria-hidden className="text-[#e03131]">*</span>
