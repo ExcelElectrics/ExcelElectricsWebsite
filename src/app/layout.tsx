@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import { SiteFooter } from "@/components/Footer/SiteFooter";
 import { CookieConsentBanner } from "@/components/CookieConsent/CookieConsentBanner";
 import { GoogleTags } from "@/components/Analytics/GoogleTags";
+import { GOOGLE_CONSENT_DEFAULTS_SCRIPT } from "@/components/CookieConsent/googleConsentMode";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -116,6 +117,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: GOOGLE_CONSENT_DEFAULTS_SCRIPT.replace(/<\//g, "<\\/"),
+          }}
+        />
         <GoogleTags />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {isComingSoon ? (

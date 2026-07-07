@@ -62,7 +62,7 @@ You may request access, correction, or deletion of your personal data by contact
     id: "cookie-policy",
     title: "Cookie Policy",
     lastUpdated: "19/06/2026",
-    markdown: `This site uses cookies and similar technologies to ensure the website functions correctly, support security features, operate the chatbot, and — where you consent — measure website usage.
+    markdown: `This site uses cookies and similar technologies to ensure the website functions correctly, support security features, operate the chatbot, and measure website usage in line with your consent choices.
 
 ### Essential cookies and technologies
 These are required for the site to work and do not require your consent:
@@ -70,20 +70,22 @@ These are required for the site to work and do not require your consent:
 - Security and anti-spam technologies, including Cloudflare Turnstile, used to help protect contact forms from automated abuse.
 - Chatbot-related storage or cookies used to operate the live chat experience and maintain conversation context.
 
-### Analytics cookies (optional)
-If you choose **Accept** on our cookie banner, we load:
+### Analytics and advertising cookies (optional)
+We use **Google Consent Mode** with:
 - **Google Analytics 4 (GA4)** — helps us understand pages visited, traffic sources, and general website usage.
 - **Google Tag Manager (GTM)** — manages analytics and marketing tags on the site, including tags used for Google Ads measurement.
 
-These analytics tools may set cookies and collect usage information. They are provided by Google and may process data outside the UK. We only load them after you accept analytics cookies.
+These tools may set cookies and collect usage information. They are provided by Google and may process data outside the UK.
 
-If you choose **Essential only**, analytics cookies are not loaded.
+If you choose **Accept**, we grant consent for analytics and advertising cookies and full measurement.
+
+If you choose **Essential only**, analytics and advertising cookies remain off. Google tags may still send limited, cookieless signals so we can understand overall traffic patterns and support advertising measurement without storing advertising cookies on your device.
 
 ### How we use cookies
 - To maintain secure, reliable website operation.
 - To support contact form protection and reduce spam submissions.
 - To provide chatbot functionality and improve the customer support experience.
-- To review traffic data and improve content, services, and marketing where you have accepted analytics cookies.
+- To review traffic data and improve content, services, and marketing in line with your consent choices.
 
 ### Managing cookies
 You can change your choice at any time by clearing site data for this website in your browser and revisiting the site to see the cookie banner again. You can also manage or disable cookies through your browser settings. Disabling essential cookies may affect parts of the website functionality.

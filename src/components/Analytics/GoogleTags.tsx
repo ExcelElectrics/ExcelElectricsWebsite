@@ -1,26 +1,30 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   COOKIE_CONSENT_CHANGED_EVENT,
-  hasAnalyticsConsent,
+  getStoredConsent,
 } from "@/components/CookieConsent/cookieConsent";
-
-const GA4_MEASUREMENT_ID = "G-QYX6X70RMF";
-const GTM_CONTAINER_ID = "GTM-K6CPG976";
+import {
+  GA4_MEASUREMENT_ID,
+  GTM_CONTAINER_ID,
+  updateGoogleConsent,
+} from "@/components/CookieConsent/googleConsentMode";
 
 export function GoogleTags() {
-  const [enabled, setEnabled] = useState(false);
-
   useEffect(() => {
-    const sync = () => setEnabled(hasAnalyticsConsent());
-    sync();
-    window.addEventListener(COOKIE_CONSENT_CHANGED_EVENT, sync);
-    return () => window.removeEventListener(COOKIE_CONSENT_CHANGED_EVENT, sync);
-  }, []);
+    const stored = getStoredConsent();
+    if (stored) updateGoogleConsent(stored);
 
-  if (!enabled) return null;
+    const onConsentChange = () => {
+      const value = getStoredConsent();
+      if (value) updateGoogleConsent(value);
+    };
+
+    window.addEventListener(COOKIE_CONSENT_CHANGED_EVENT, onConsentChange);
+    return () => window.removeEventListener(COOKIE_CONSENT_CHANGED_EVENT, onConsentChange);
+  }, []);
 
   return (
     <>

@@ -1,4 +1,10 @@
 import { Resend } from "resend";
+import {
+  getEnquiryPreferredContactLabel,
+  getEnquiryServiceLabel,
+  isEnquiryPreferredContactValue,
+  isEnquiryServiceValue,
+} from "@/components/Electrics/enquiryFormOptions";
 
 export const runtime = "nodejs";
 
@@ -90,10 +96,37 @@ export async function POST(request: Request) {
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
+  const service = String(formData.get("service") ?? "").trim();
+  const serviceOther = String(formData.get("serviceOther") ?? "").trim();
+  const preferredContact = String(formData.get("preferredContact") ?? "").trim();
 
   if (!name || !email || !message) {
     return Response.json({ ok: false, error: "Please complete your name, email and message." }, { status: 400 });
   }
+
+  if (!isEnquiryServiceValue(service)) {
+    return Response.json({ ok: false, error: "Please select a valid service." }, { status: 400 });
+  }
+
+  if (service === "other" && !serviceOther) {
+    return Response.json(
+      { ok: false, error: "Please tell us which service you need under Other." },
+      { status: 400 },
+    );
+  }
+
+  if (!isEnquiryPreferredContactValue(preferredContact)) {
+    return Response.json(
+      { ok: false, error: "Please select your preferred contact method." },
+      { status: 400 },
+    );
+  }
+
+  const serviceLabel = getEnquiryServiceLabel(service) ?? service;
+  const serviceDisplay =
+    service === "other" ? `Other — ${serviceOther}` : serviceLabel;
+  const preferredContactLabel =
+    getEnquiryPreferredContactLabel(preferredContact) ?? preferredContact;
 
   if (!EMAIL_PATTERN.test(email)) {
     return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
@@ -130,6 +163,8 @@ export async function POST(request: Request) {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
   const safePhone = phone ? escapeHtml(phone) : "Not provided";
+  const safeService = escapeHtml(serviceDisplay);
+  const safePreferredContact = escapeHtml(preferredContactLabel);
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
   const attachmentNote = attachments.length
     ? `<p style="margin: 16px 0 0; color: #475569; font-size: 13px;">${attachments.length} attachment(s) included.</p>`
@@ -141,6 +176,8 @@ export async function POST(request: Request) {
       <p style="margin: 0 0 8px;"><strong>Name:</strong> ${safeName}</p>
       <p style="margin: 0 0 8px;"><strong>Email:</strong> ${safeEmail}</p>
       <p style="margin: 0 0 8px;"><strong>Phone:</strong> ${safePhone}</p>
+      <p style="margin: 0 0 8px;"><strong>Service:</strong> ${safeService}</p>
+      <p style="margin: 0 0 8px;"><strong>Preferred contact:</strong> ${safePreferredContact}</p>
       <p style="margin: 16px 0 4px;"><strong>Message:</strong></p>
       <p style="margin: 0; padding: 12px 16px; background: #f4f1fb; border-left: 3px solid #905bf4; border-radius: 4px;">${safeMessage}</p>
       ${attachmentNote}
@@ -153,6 +190,8 @@ export async function POST(request: Request) {
     `Name: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
+    `Service: ${serviceDisplay}`,
+    `Preferred contact: ${preferredContactLabel}`,
     "",
     "Message:",
     message,
