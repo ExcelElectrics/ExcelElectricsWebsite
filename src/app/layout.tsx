@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { DesktopNavbar } from "@/components/Navigation/DesktopNavbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/Navigation/MobileNavbar/MobileNavbar";
 import { ComingSoonScreen } from "@/components/ComingSoon/ComingSoonScreen";
 import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import { SiteFooter } from "@/components/Footer/SiteFooter";
 import { CookieConsentBanner } from "@/components/CookieConsent/CookieConsentBanner";
-import { GoogleTags } from "@/components/Analytics/GoogleTags";
-import { GOOGLE_CONSENT_DEFAULTS_SCRIPT } from "@/components/CookieConsent/googleConsentMode";
+import { GoogleConsentSync } from "@/components/Analytics/GoogleConsentSync";
+import {
+  GA4_MEASUREMENT_ID,
+  GOOGLE_CONSENT_DEFAULTS_SCRIPT,
+  GTM_CONTAINER_ID,
+} from "@/components/CookieConsent/googleConsentMode";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -71,6 +76,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: "On_BTlTRuViw2ROPiiIv0e440Ws-bwxl6AWvqj2CTJo",
+  },
   openGraph: {
     type: "website",
     url: "/",
@@ -119,13 +127,23 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <GoogleTagManager gtmId={GTM_CONTAINER_ID} />
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
           dangerouslySetInnerHTML={{
             __html: GOOGLE_CONSENT_DEFAULTS_SCRIPT.replace(/<\//g, "<\\/"),
           }}
         />
-        <GoogleTags />
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
+        <GoogleConsentSync />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {isComingSoon ? (
             <ComingSoonScreen />
@@ -151,6 +169,7 @@ export default function RootLayout({
           }}
         />
       </body>
+      <GoogleAnalytics gaId={GA4_MEASUREMENT_ID} />
     </html>
   );
 }

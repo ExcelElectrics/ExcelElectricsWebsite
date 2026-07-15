@@ -4,6 +4,7 @@ import { ElectricsLogo } from "@/components/Brand/ElectricsLogo";
 
 const FOOTER_LINKEDIN_HREF = "https://www.linkedin.com/company/excelelectrics/";
 const FOOTER_INSTAGRAM_HREF = "https://www.instagram.com/excel_electrics/";
+const FOOTER_FACEBOOK_HREF = "https://www.facebook.com/profile.php?id=61591784010806";
 
 const FOOTER_PHONE_TEL = "tel:+447730591822";
 const FOOTER_PHONE_LABEL = "07730591822";
@@ -118,6 +119,22 @@ export function SiteFooter() {
                 className="h-4 w-4 object-contain"
               />
             </a>
+            <a
+              href={FOOTER_FACEBOOK_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${socialIconBtnClass} h-8 w-8`}
+              aria-label="Excel Electrics on Facebook"
+            >
+              <Image
+                src="/icons/facebook.svg"
+                alt=""
+                width={16}
+                height={16}
+                unoptimized
+                className="h-4 w-4 object-contain"
+              />
+            </a>
           </div>
 
           <address className="text-xs leading-snug not-italic" style={{ color: "var(--foreground)" }}>
@@ -177,6 +194,22 @@ export function SiteFooter() {
               >
                 <Image
                   src="/icons/instagram.svg"
+                  alt=""
+                  width={18}
+                  height={18}
+                  unoptimized
+                  className="h-[18px] w-[18px] object-contain"
+                />
+              </a>
+              <a
+                href={FOOTER_FACEBOOK_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={socialIconBtnClass}
+                aria-label="Excel Electrics on Facebook"
+              >
+                <Image
+                  src="/icons/facebook.svg"
                   alt=""
                   width={18}
                   height={18}
