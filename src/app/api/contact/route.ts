@@ -1,7 +1,11 @@
 import { Resend } from "resend";
 import {
+  getEnquiryHeardAboutLabel,
+  getEnquiryLocationLabel,
   getEnquiryPreferredContactLabel,
   getEnquiryServiceLabel,
+  isEnquiryHeardAboutValue,
+  isEnquiryLocationValue,
   isEnquiryPreferredContactValue,
   isEnquiryServiceValue,
 } from "@/components/Electrics/enquiryFormOptions";
@@ -99,6 +103,8 @@ export async function POST(request: Request) {
   const service = String(formData.get("service") ?? "").trim();
   const serviceOther = String(formData.get("serviceOther") ?? "").trim();
   const preferredContact = String(formData.get("preferredContact") ?? "").trim();
+  const heardAbout = String(formData.get("heardAbout") ?? "").trim();
+  const location = String(formData.get("location") ?? "").trim();
 
   if (!name || !email || !message) {
     return Response.json({ ok: false, error: "Please complete your name, email and message." }, { status: 400 });
@@ -122,11 +128,24 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!isEnquiryHeardAboutValue(heardAbout)) {
+    return Response.json(
+      { ok: false, error: "Please let us know how you heard about us." },
+      { status: 400 },
+    );
+  }
+
+  if (!isEnquiryLocationValue(location)) {
+    return Response.json({ ok: false, error: "Please select your location." }, { status: 400 });
+  }
+
   const serviceLabel = getEnquiryServiceLabel(service) ?? service;
   const serviceDisplay =
     service === "other" ? `Other — ${serviceOther}` : serviceLabel;
   const preferredContactLabel =
     getEnquiryPreferredContactLabel(preferredContact) ?? preferredContact;
+  const heardAboutLabel = getEnquiryHeardAboutLabel(heardAbout) ?? heardAbout;
+  const locationLabel = getEnquiryLocationLabel(location) ?? location;
 
   if (!EMAIL_PATTERN.test(email)) {
     return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
@@ -165,6 +184,8 @@ export async function POST(request: Request) {
   const safePhone = phone ? escapeHtml(phone) : "Not provided";
   const safeService = escapeHtml(serviceDisplay);
   const safePreferredContact = escapeHtml(preferredContactLabel);
+  const safeHeardAbout = escapeHtml(heardAboutLabel);
+  const safeLocation = escapeHtml(locationLabel);
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
   const attachmentNote = attachments.length
     ? `<p style="margin: 16px 0 0; color: #475569; font-size: 13px;">${attachments.length} attachment(s) included.</p>`
@@ -178,6 +199,8 @@ export async function POST(request: Request) {
       <p style="margin: 0 0 8px;"><strong>Phone:</strong> ${safePhone}</p>
       <p style="margin: 0 0 8px;"><strong>Service:</strong> ${safeService}</p>
       <p style="margin: 0 0 8px;"><strong>Preferred contact:</strong> ${safePreferredContact}</p>
+      <p style="margin: 0 0 8px;"><strong>Location:</strong> ${safeLocation}</p>
+      <p style="margin: 0 0 8px;"><strong>How they heard about us:</strong> ${safeHeardAbout}</p>
       <p style="margin: 16px 0 4px;"><strong>Message:</strong></p>
       <p style="margin: 0; padding: 12px 16px; background: #f4f1fb; border-left: 3px solid #905bf4; border-radius: 4px;">${safeMessage}</p>
       ${attachmentNote}
@@ -192,6 +215,8 @@ export async function POST(request: Request) {
     `Phone: ${phone || "Not provided"}`,
     `Service: ${serviceDisplay}`,
     `Preferred contact: ${preferredContactLabel}`,
+    `Location: ${locationLabel}`,
+    `How they heard about us: ${heardAboutLabel}`,
     "",
     "Message:",
     message,

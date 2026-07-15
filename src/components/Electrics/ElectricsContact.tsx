@@ -6,6 +6,8 @@ import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { ElectricsSection } from "@/components/Electrics/ElectricsSection";
 import { LightningBolt } from "@/components/Electrics/LightningBolt";
 import {
+  ENQUIRY_HEARD_ABOUT,
+  ENQUIRY_LOCATIONS,
   ENQUIRY_PREFERRED_CONTACT,
   ENQUIRY_SERVICES,
   type EnquiryServiceValue,
@@ -86,6 +88,8 @@ export function ElectricsContact() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const [selectedService, setSelectedService] = useState<EnquiryServiceValue | "">("");
   const [preferredContact, setPreferredContact] = useState("");
+  const [heardAbout, setHeardAbout] = useState("");
+  const [location, setLocation] = useState("");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
@@ -175,6 +179,8 @@ export function ElectricsContact() {
     const service = String(formData.get("service") ?? "").trim();
     const serviceOther = String(formData.get("serviceOther") ?? "").trim();
     const preferredContact = String(formData.get("preferredContact") ?? "").trim();
+    const heardAbout = String(formData.get("heardAbout") ?? "").trim();
+    const location = String(formData.get("location") ?? "").trim();
 
     if (!name || !email || !message) {
       setErrorMessage("Please complete your name, email and message.");
@@ -196,6 +202,18 @@ export function ElectricsContact() {
 
     if (!preferredContact) {
       setErrorMessage("Please select your preferred contact method.");
+      setStatus("error");
+      return;
+    }
+
+    if (!heardAbout) {
+      setErrorMessage("Please let us know how you heard about us.");
+      setStatus("error");
+      return;
+    }
+
+    if (!location) {
+      setErrorMessage("Please select your location.");
       setStatus("error");
       return;
     }
@@ -241,6 +259,8 @@ export function ElectricsContact() {
       setFiles([]);
       setSelectedService("");
       setPreferredContact("");
+      setHeardAbout("");
+      setLocation("");
       turnstileRef.current?.reset();
       setTurnstileToken("");
       setStatus("success");
@@ -432,6 +452,54 @@ export function ElectricsContact() {
                 />
               </div>
             )}
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+              <div className="space-y-2">
+                <label htmlFor="enquiry-heard-about" className={labelClass}>
+                  How did you hear about us? <span aria-hidden className="text-[#e03131]">*</span>
+                </label>
+                <select
+                  id="enquiry-heard-about"
+                  name="heardAbout"
+                  required
+                  aria-required="true"
+                  value={heardAbout}
+                  onChange={(event) => setHeardAbout(event.target.value)}
+                  className={selectClass}
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  {ENQUIRY_HEARD_ABOUT.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="enquiry-location" className={labelClass}>
+                  Location <span aria-hidden className="text-[#e03131]">*</span>
+                </label>
+                <select
+                  id="enquiry-location"
+                  name="location"
+                  required
+                  aria-required="true"
+                  value={location}
+                  onChange={(event) => setLocation(event.target.value)}
+                  className={selectClass}
+                >
+                  <option value="" disabled>
+                    Select your area
+                  </option>
+                  {ENQUIRY_LOCATIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             <div className="space-y-2">
               <label htmlFor="enquiry-message" className={labelClass}>
                 Message <span aria-hidden className="text-[#e03131]">*</span>
