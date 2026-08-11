@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   motion,
   useMotionValue,
@@ -11,10 +12,12 @@ import {
 } from "motion/react";
 import { ElectricsSection } from "@/components/Electrics/ElectricsSection";
 import { LightningBolt } from "@/components/Electrics/LightningBolt";
+import { RevealBlock } from "@/components/Electrics/ServiceLanding/useRevealInView";
 
 const pillars = [
   {
     title: "Electrical work",
+    href: "/services/electrical-work",
     items: [
       "Fault finding & repairs",
       "New lights, sockets & upgrades",
@@ -25,6 +28,7 @@ const pillars = [
   },
   {
     title: "Fire safety",
+    href: "/services/fire-safety",
     items: [
       "Smoke alarm installation & upgrades",
       "Heat detectors for kitchens & garages",
@@ -35,6 +39,7 @@ const pillars = [
   },
   {
     title: "Access & security",
+    href: "/services/access-security",
     items: [
       "Door entry systems (intercoms, keypads & fobs)",
       "Access control for homes & flats",
@@ -43,6 +48,7 @@ const pillars = [
   },
   {
     title: "Garage doors & electric gates",
+    href: "/services/gates-garage-bollards",
     items: [
       "Automated garage doors",
       "Electric gate installations",
@@ -52,6 +58,7 @@ const pillars = [
   },
   {
     title: "EV charging",
+    href: "/services/ev-charging",
     items: [
       "Home EV charger installation",
       "EV charger repairs and upgrades",
@@ -120,7 +127,7 @@ function ServicePillar({ pillar, index, total, regionProgress, isWide, reduceMot
   const lineAt = (line: number) => (line / lineCount) * REVEAL_RANGE;
 
   return (
-    <div className="relative min-h-[7rem] pl-6 xl:pl-6">
+    <div className="relative flex h-full min-h-[7rem] flex-col pl-6 xl:pl-6">
       <LightningBolt
         progress={charge}
         className="pointer-events-none absolute left-0 top-0 z-10 h-full w-[18px] xl:left-[-0.85rem] xl:w-[22px]"
@@ -130,7 +137,9 @@ function ServicePillar({ pillar, index, total, regionProgress, isWide, reduceMot
           {String(index + 1).padStart(2, "0")}
         </span>
         <h3 className="text-foreground text-[15px] font-semibold leading-snug tracking-tight md:text-base">
-          {pillar.title}
+          <Link href={pillar.href} className="transition-colors hover:text-[#905bf4]">
+            {pillar.title}
+          </Link>
         </h3>
       </BoltLine>
       <ul className="mt-3 space-y-1 border-t border-[#4b378c]/30 pt-2.5 text-[13px] leading-snug text-[var(--text-muted)] md:text-sm md:leading-relaxed">
@@ -183,7 +192,7 @@ export function ElectricsServices() {
       </p>
 
       <div ref={regionRef} className="mx-auto mt-10 max-w-7xl md:mt-12">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 xl:grid-cols-5 xl:gap-6">
+        <div className="grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 xl:grid-cols-5 xl:gap-6">
           {pillars.map((pillar, index) => (
             <ServicePillar
               key={pillar.title}
@@ -195,6 +204,17 @@ export function ElectricsServices() {
               reduceMotion={reduceMotion}
             />
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center md:mt-12">
+          <RevealBlock variant="rise">
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center rounded-md bg-[#905bf4] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_-14px_rgba(75,1,184,0.92)] transition hover:bg-[#905bf4] hover:text-white motion-safe:hover:-translate-y-1 motion-safe:active:translate-y-0"
+            >
+              View all services
+            </Link>
+          </RevealBlock>
         </div>
       </div>
     </ElectricsSection>

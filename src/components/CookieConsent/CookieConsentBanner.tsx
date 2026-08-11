@@ -44,13 +44,13 @@ export function CookieConsentBanner() {
           <p id="cookie-consent-desc" className="text-sm leading-relaxed text-[var(--text-muted)]">
             We use cookies as explained in our{" "}
             <Link
-              href="/legal#cookie-policy"
+              href="/legal/cookie-policy"
               className="font-medium text-brand-blue underline-offset-2 hover:underline"
             >
               Cookie policy
             </Link>
             {" "}
-            — including those needed for the site to work and optional analytics such as Google Analytics. Choose{" "}
+            - including those needed for the site to work and optional analytics such as Google Analytics. Choose{" "}
             <strong className="font-semibold text-foreground">Accept</strong> to allow analytics cookies, or{" "}
             <strong className="font-semibold text-foreground">Essential only</strong> to use necessary cookies only.
           </p>

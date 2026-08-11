@@ -11,16 +11,16 @@ const FOOTER_PHONE_LABEL = "07730591822";
 const FOOTER_LEGAL_DISCLAIMER = "Excel Fire Ltd, trading as Excel Electrics.";
 
 const footerLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Why us", href: "#why-us" },
-  { label: "Areas", href: "#areas" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/services" },
+  { label: "Why us", href: "/why-us" },
+  { label: "Areas", href: "/areas" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const footerLegalLinks = [
-  { label: "Terms of use", href: "/legal#terms-of-use" },
-  { label: "Privacy policy", href: "/legal#privacy-policy" },
-  { label: "Cookie policy", href: "/legal#cookie-policy" },
+  { label: "Terms of use", href: "/legal/terms-of-use" },
+  { label: "Privacy policy", href: "/legal/privacy-policy" },
+  { label: "Cookie policy", href: "/legal/cookie-policy" },
 ];
 
 const socialIconBtnClass =
@@ -31,7 +31,7 @@ export function SiteFooter() {
     <footer className="electrics-small-jobs-gradient-bg border-t border-[color:var(--electrics-nav-footer-edge)]">
       <div className="mx-auto w-full max-w-7xl px-6 pt-4 pb-10 md:pt-5 md:pb-12">
         <div className="space-y-4 md:hidden">
-          <Link href="/#top" aria-label="Excel Electrics home" className="inline-block leading-none">
+          <Link href="/" aria-label="Excel Electrics home" className="inline-block leading-none">
             <ElectricsLogo width={208} height={54} />
           </Link>
           <p className="text-sm leading-relaxed" style={{ color: "var(--foreground)" }}>
@@ -155,7 +155,7 @@ export function SiteFooter() {
         <div className="hidden md:grid md:grid-cols-2 md:items-stretch md:gap-x-10 lg:gap-x-12">
           <div className="flex min-h-0 min-w-0 flex-col md:h-full">
             <Link
-              href="/#top"
+              href="/"
               aria-label="Excel Electrics home"
               className="inline-block shrink-0 leading-none"
             >

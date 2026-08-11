@@ -72,8 +72,8 @@ These are required for the site to work and do not require your consent:
 
 ### Analytics and advertising cookies (optional)
 We use **Google Consent Mode** with:
-- **Google Analytics 4 (GA4)** — helps us understand pages visited, traffic sources, and general website usage.
-- **Google Tag Manager (GTM)** — manages analytics and marketing tags on the site, including tags used for Google Ads measurement.
+- **Google Analytics 4 (GA4)** - helps us understand pages visited, traffic sources, and general website usage.
+- **Google Tag Manager (GTM)** - manages analytics and marketing tags on the site, including tags used for Google Ads measurement.
 
 These tools may set cookies and collect usage information. They are provided by Google and may process data outside the UK.
 

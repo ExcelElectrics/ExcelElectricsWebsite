@@ -5,6 +5,8 @@ export function ElectricsAreas() {
     <HomeLocations
       variant="electrics"
       sectionId="areas"
+      viewAllHref="/areas"
+      viewAllLabel="View all areas"
       heading={{
         kicker: "Local & reliable",
         title: "Areas we cover",

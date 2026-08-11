@@ -89,9 +89,9 @@ export function ElectricsHero() {
   const visibleClass = isVisible ? "is-visible" : "";
 
   return (
-    <section id="top" className="relative isolate min-h-[70vh] scroll-mt-0 overflow-hidden bg-black md:min-h-[76vh]">
+    <section className="electrics-hero-min-h relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/Excel Home Hero.png"
+        src="/ExcelElectrics/Excel Home Hero.webp"
         alt="Electric vehicle charger installation at a home"
         fill
         priority
@@ -105,7 +105,7 @@ export function ElectricsHero() {
       />
 
       <div
-        className={`relative mx-auto flex min-h-[70vh] w-full max-w-7xl items-end px-6 pt-16 md:min-h-[76vh] md:items-center ${ELECTRICS_HERO_BOTTOM_ONLY}`}
+        className={`electrics-hero-min-h relative mx-auto flex w-full max-w-7xl items-end px-6 pt-16 md:items-center ${ELECTRICS_HERO_BOTTOM_ONLY}`}
       >
         <div ref={contentRef} className="max-w-4xl space-y-6">
           <p
@@ -136,7 +136,7 @@ export function ElectricsHero() {
           </p>
 
           <div className={`reveal-rise ${visibleClass} flex flex-wrap items-center gap-3 pt-1`} style={revealDelay(390)}>
-            <Link href="#contact" className={primaryBtn}>
+            <Link href="/contact" className={primaryBtn}>
               <span
                 className="electrics-hero-btn-mail-icon inline-flex shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out motion-safe:group-hover:-translate-y-1"
                 aria-hidden
@@ -145,7 +145,7 @@ export function ElectricsHero() {
               </span>
               Send an enquiry
             </Link>
-            <Link href="#services" className={secondaryBtn}>
+            <Link href="/services" className={secondaryBtn}>
               <span className="electrics-hero-btn-wrench-icon inline-flex shrink-0" aria-hidden>
                 <IconWrench className="h-5 w-5" />
               </span>

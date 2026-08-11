@@ -140,6 +140,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -152,6 +154,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 .text-brand-primary {
@@ -236,6 +240,30 @@ body {
   background: var(--electrics-hero-overlay);
 }
 
+/*
+  Stable hero height on mobile: vh fallback, then svh.
+  Never use dvh here — it resizes when browser chrome settles and flashes the layout.
+*/
+.electrics-hero-min-h {
+  min-height: 70vh;
+  min-height: 70svh;
+}
+
+.electrics-hero-min-h-sm {
+  min-height: 58vh;
+  min-height: 58svh;
+}
+
+@media (min-width: 768px) {
+  .electrics-hero-min-h {
+    min-height: 76vh;
+  }
+
+  .electrics-hero-min-h-sm {
+    min-height: 64vh;
+  }
+}
+
 .text-muted {
   color: var(--text-muted);
 }
@@ -282,16 +310,14 @@ body {
     transform 600ms ease-out;
 }
 
-.reveal-slide-left {
-  transform: translate3d(-40px, 0, 0);
-  transition:
-    opacity 600ms ease-out,
-    transform 600ms ease-out;
-  transition-delay: var(--reveal-delay, 0ms);
-}
-
+/*
+  Mobile/tablet: vertical fade only.
+  Horizontal translate expands document scrollWidth (left/right pan) until
+  .is-visible fires — that matches “scroll a bit and the layout sorts itself”.
+*/
+.reveal-slide-left,
 .reveal-slide-right {
-  transform: translate3d(40px, 0, 0);
+  transform: translate3d(0, 16px, 0);
   transition:
     opacity 600ms ease-out,
     transform 600ms ease-out;

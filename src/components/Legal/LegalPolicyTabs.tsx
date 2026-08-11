@@ -1,55 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { legalPolicies } from "@/components/Legal/legal";
+import { legalPolicyPath } from "@/components/Legal/legalRoutes";
 
 const tabBase =
-  "rounded-md px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]";
+  "rounded-md px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#905bf4]/45";
 
-const tabActive = "bg-brand-blue text-white shadow-sm hover:bg-brand-blue";
+/** Solid brand fill so the active tab stays readable in light mode. */
+const tabActive = "border border-[#905bf4] bg-[#905bf4] text-white shadow-[0_10px_20px_-14px_rgba(75,1,184,0.85)]";
 
 const tabInactive =
-  "border border-[var(--border)] bg-[var(--surface)] text-foreground hover:border-brand-blue/45 hover:bg-[color-mix(in_srgb,var(--brand-blue)_10%,var(--surface))] dark:hover:bg-[color-mix(in_srgb,var(--brand-blue)_20%,var(--surface))]";
+  "border border-[var(--border)] bg-[var(--surface)] text-foreground hover:border-[#905bf4]/55 hover:text-[#905bf4]";
 
 export function LegalPolicyTabs() {
-  const [activeId, setActiveId] = useState<string>(legalPolicies[0]?.id ?? "");
-
-  useEffect(() => {
-    const sync = () => {
-      const raw = window.location.hash.replace(/^#/, "");
-      if (raw && legalPolicies.some((p) => p.id === raw)) {
-        setActiveId(raw);
-      } else if (!raw && legalPolicies[0]) {
-        setActiveId(legalPolicies[0].id);
-      }
-    };
-    sync();
-    window.addEventListener("hashchange", sync);
-    return () => window.removeEventListener("hashchange", sync);
-  }, []);
-
-  const select = (id: string) => {
-    setActiveId(id);
-    window.history.pushState(null, "", `#${id}`);
-  };
+  const pathname = usePathname();
 
   return (
-    <nav
-      aria-label="Choose a policy"
-      className="flex flex-wrap items-center justify-center gap-2 md:gap-3"
-    >
+    <nav aria-label="Choose a policy" className="flex flex-wrap items-center gap-2 md:gap-3">
       {legalPolicies.map((policy) => {
-        const isActive = policy.id === activeId;
+        const href = legalPolicyPath(policy.id);
+        const isActive = pathname === href;
         return (
-          <button
+          <Link
             key={policy.id}
-            type="button"
-            onClick={() => select(policy.id)}
+            href={href}
             className={`${tabBase} ${isActive ? tabActive : tabInactive}`}
             aria-current={isActive ? "page" : undefined}
           >
             {policy.title}
-          </button>
+          </Link>
         );
       })}
     </nav>

@@ -1,8 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ELECTRICS_SECTION_SHELL_MAJOR_SEAM } from "@/components/Electrics/ElectricsSection";
+import {
+  ELECTRICS_SECTION_SHELL,
+  ELECTRICS_SECTION_SHELL_MAJOR_SEAM,
+} from "@/components/Electrics/ElectricsSection";
+import { RevealBlock } from "@/components/Electrics/ServiceLanding/useRevealInView";
 
 type CoverageArea = {
   id: string;
@@ -300,6 +305,13 @@ export type HomeLocationsProps = {
   variant?: "default" | "electrics";
   sectionId?: string;
   heading?: HomeLocationsHeading;
+  /** When false, skips the larger bottom padding used before the footer. Default true for electrics. */
+  majorSeam?: boolean;
+  /** When set, shows a link from the active county to `${detailBasePath}/${area.id}`. */
+  detailBasePath?: string;
+  /** Optional centred CTA under the map (e.g. homepage → /areas). */
+  viewAllHref?: string;
+  viewAllLabel?: string;
 };
 
 const areaRegionGroups: AreaRegionGroup[] = [
@@ -499,6 +511,10 @@ export function HomeLocations({
   variant = "default",
   sectionId,
   heading,
+  majorSeam,
+  detailBasePath,
+  viewAllHref,
+  viewAllLabel = "View all areas",
 }: HomeLocationsProps = {}) {
   const renderAreaLabel = (county: string) =>
     county === "Greater London" ? (
@@ -1144,11 +1160,19 @@ export function HomeLocations({
   const textRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-left";
   const mapRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-right";
 
+  const electricsUsesMajorSeam = majorSeam ?? true;
+
   return (
     <section
       ref={sectionRef}
       id={sectionId}
-      className={variant === "electrics" ? ELECTRICS_SECTION_SHELL_MAJOR_SEAM : "pt-10 pb-10 md:pt-12 md:pb-12"}
+      className={
+        variant === "electrics"
+          ? electricsUsesMajorSeam
+            ? ELECTRICS_SECTION_SHELL_MAJOR_SEAM
+            : ELECTRICS_SECTION_SHELL
+          : "pt-10 pb-10 md:pt-12 md:pb-12"
+      }
     >
       <div
         className={`mx-auto grid w-full max-w-7xl gap-6 px-6 lg:grid-cols-[1fr_1fr] lg:gap-10 ${variant === "electrics" ? "lg:items-stretch" : "lg:items-center"}`}
@@ -1365,6 +1389,14 @@ export function HomeLocations({
                     ? activeArea.towns.join(", ")
                     : "County-wide coverage available."}
                 </p>
+                {detailBasePath && activeArea ? (
+                  <Link
+                    href={`${detailBasePath}/${activeArea.id}`}
+                    className="mt-2 inline-flex text-sm font-semibold text-[#905bf4] transition-colors hover:text-[#4b378c]"
+                  >
+                    View {activeArea.county} details
+                  </Link>
+                ) : null}
               </div>
             </div>
           )}
@@ -1448,6 +1480,19 @@ export function HomeLocations({
           )}
         </div>
       </div>
+
+      {viewAllHref ? (
+        <div className="mt-10 flex justify-center px-6 md:mt-12">
+          <RevealBlock variant="rise">
+            <Link
+              href={viewAllHref}
+              className="inline-flex items-center justify-center rounded-md bg-[#905bf4] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_-14px_rgba(75,1,184,0.92)] transition hover:bg-[#905bf4] hover:text-white motion-safe:hover:-translate-y-1 motion-safe:active:translate-y-0"
+            >
+              {viewAllLabel}
+            </Link>
+          </RevealBlock>
+        </div>
+      ) : null}
     </section>
   );
 }

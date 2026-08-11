@@ -4,6 +4,35 @@ type LegalMarkdownProps = {
   markdown: string;
 };
 
+/** Renders inline markdown: **bold** and plain text. */
+function renderInline(text: string, keyPrefix: string): ReactNode[] {
+  const parts: ReactNode[] = [];
+  const pattern = /\*\*(.+?)\*\*/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let part = 0;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(
+        <Fragment key={`${keyPrefix}-t-${part++}`}>{text.slice(lastIndex, match.index)}</Fragment>,
+      );
+    }
+    parts.push(
+      <strong key={`${keyPrefix}-b-${part++}`} className="font-semibold text-foreground">
+        {match[1]}
+      </strong>,
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(<Fragment key={`${keyPrefix}-t-${part++}`}>{text.slice(lastIndex)}</Fragment>);
+  }
+
+  return parts;
+}
+
 export function LegalMarkdown({ markdown }: LegalMarkdownProps) {
   const lines = markdown.split("\n");
   const blocks: ReactNode[] = [];
@@ -21,7 +50,7 @@ export function LegalMarkdown({ markdown }: LegalMarkdownProps) {
     if (line.startsWith("### ")) {
       blocks.push(
         <h3 key={`h3-${key++}`} className="text-lg font-semibold text-foreground">
-          {line.slice(4)}
+          {renderInline(line.slice(4), `h3-${key}`)}
         </h3>,
       );
       i += 1;
@@ -31,7 +60,7 @@ export function LegalMarkdown({ markdown }: LegalMarkdownProps) {
     if (line.startsWith("## ")) {
       blocks.push(
         <h2 key={`h2-${key++}`} className="text-2xl font-bold tracking-tight text-brand-primary">
-          {line.slice(3)}
+          {renderInline(line.slice(3), `h2-${key}`)}
         </h2>,
       );
       i += 1;
@@ -47,8 +76,8 @@ export function LegalMarkdown({ markdown }: LegalMarkdownProps) {
 
       blocks.push(
         <ul key={`ul-${key++}`} className="list-disc space-y-2 pl-5 text-[var(--text-muted)]">
-          {listItems.map((item) => (
-            <li key={`li-${key++}`}>{item}</li>
+          {listItems.map((item, itemIndex) => (
+            <li key={`li-${key++}`}>{renderInline(item, `li-${key}-${itemIndex}`)}</li>
           ))}
         </ul>,
       );
@@ -68,7 +97,7 @@ export function LegalMarkdown({ markdown }: LegalMarkdownProps) {
     if (paragraphLines.length > 0) {
       blocks.push(
         <p key={`p-${key++}`} className="leading-8 text-[var(--text-muted)]">
-          {paragraphLines.join(" ")}
+          {renderInline(paragraphLines.join(" "), `p-${key}`)}
         </p>,
       );
     }
