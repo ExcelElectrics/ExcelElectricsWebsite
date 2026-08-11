@@ -99,15 +99,26 @@ export async function POST(request: Request) {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
+  const postcode = String(formData.get("postcode") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
   const service = String(formData.get("service") ?? "").trim();
   const serviceOther = String(formData.get("serviceOther") ?? "").trim();
   const preferredContact = String(formData.get("preferredContact") ?? "").trim();
   const heardAbout = String(formData.get("heardAbout") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
+  const landingDetail = String(formData.get("landingDetail") ?? "").trim();
+  const formSource = String(formData.get("formSource") ?? "").trim();
+  const isLandingForm = formSource === "landing";
 
   if (!name || !email || !message) {
     return Response.json({ ok: false, error: "Please complete your name, email and message." }, { status: 400 });
+  }
+
+  if (isLandingForm && (!phone || !postcode || !landingDetail)) {
+    return Response.json(
+      { ok: false, error: "Please complete your phone, postcode and enquiry details." },
+      { status: 400 },
+    );
   }
 
   if (!isEnquiryServiceValue(service)) {
@@ -121,31 +132,36 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!isEnquiryPreferredContactValue(preferredContact)) {
+  if (!isLandingForm && !isEnquiryPreferredContactValue(preferredContact)) {
     return Response.json(
       { ok: false, error: "Please select your preferred contact method." },
       { status: 400 },
     );
   }
 
-  if (!isEnquiryHeardAboutValue(heardAbout)) {
+  if (!isLandingForm && !isEnquiryHeardAboutValue(heardAbout)) {
     return Response.json(
       { ok: false, error: "Please let us know how you heard about us." },
       { status: 400 },
     );
   }
 
-  if (!isEnquiryLocationValue(location)) {
+  if (!isLandingForm && !isEnquiryLocationValue(location)) {
     return Response.json({ ok: false, error: "Please select your location." }, { status: 400 });
   }
 
   const serviceLabel = getEnquiryServiceLabel(service) ?? service;
   const serviceDisplay =
-    service === "other" ? `Other — ${serviceOther}` : serviceLabel;
-  const preferredContactLabel =
-    getEnquiryPreferredContactLabel(preferredContact) ?? preferredContact;
-  const heardAboutLabel = getEnquiryHeardAboutLabel(heardAbout) ?? heardAbout;
-  const locationLabel = getEnquiryLocationLabel(location) ?? location;
+    service === "other" ? `Other - ${serviceOther}` : serviceLabel;
+  const preferredContactLabel = preferredContact
+    ? getEnquiryPreferredContactLabel(preferredContact) ?? preferredContact
+    : "Not provided";
+  const heardAboutLabel = heardAbout
+    ? getEnquiryHeardAboutLabel(heardAbout) ?? heardAbout
+    : "Not provided";
+  const locationLabel = location
+    ? getEnquiryLocationLabel(location) ?? location
+    : "Not provided";
 
   if (!EMAIL_PATTERN.test(email)) {
     return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
@@ -182,10 +198,12 @@ export async function POST(request: Request) {
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
   const safePhone = phone ? escapeHtml(phone) : "Not provided";
+  const safePostcode = postcode ? escapeHtml(postcode) : "Not provided";
   const safeService = escapeHtml(serviceDisplay);
   const safePreferredContact = escapeHtml(preferredContactLabel);
   const safeHeardAbout = escapeHtml(heardAboutLabel);
   const safeLocation = escapeHtml(locationLabel);
+  const safeLandingDetail = landingDetail ? escapeHtml(landingDetail) : "";
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
   const attachmentNote = attachments.length
     ? `<p style="margin: 16px 0 0; color: #475569; font-size: 13px;">${attachments.length} attachment(s) included.</p>`
@@ -193,14 +211,16 @@ export async function POST(request: Request) {
 
   const html = `
     <div style="font-family: Arial, Helvetica, sans-serif; color: #0f172a; line-height: 1.5;">
-      <h2 style="margin: 0 0 16px; color: #4b378c;">New website enquiry</h2>
+      <h2 style="margin: 0 0 16px; color: #4b378c;">New website enquiry${isLandingForm ? " (landing page)" : ""}</h2>
       <p style="margin: 0 0 8px;"><strong>Name:</strong> ${safeName}</p>
       <p style="margin: 0 0 8px;"><strong>Email:</strong> ${safeEmail}</p>
       <p style="margin: 0 0 8px;"><strong>Phone:</strong> ${safePhone}</p>
+      ${isLandingForm ? `<p style="margin: 0 0 8px;"><strong>Postcode:</strong> ${safePostcode}</p>` : ""}
       <p style="margin: 0 0 8px;"><strong>Service:</strong> ${safeService}</p>
-      <p style="margin: 0 0 8px;"><strong>Preferred contact:</strong> ${safePreferredContact}</p>
-      <p style="margin: 0 0 8px;"><strong>Location:</strong> ${safeLocation}</p>
-      <p style="margin: 0 0 8px;"><strong>How they heard about us:</strong> ${safeHeardAbout}</p>
+      ${safeLandingDetail ? `<p style="margin: 0 0 8px;"><strong>Landing detail:</strong> ${safeLandingDetail}</p>` : ""}
+      ${!isLandingForm ? `<p style="margin: 0 0 8px;"><strong>Preferred contact:</strong> ${safePreferredContact}</p>` : ""}
+      ${!isLandingForm ? `<p style="margin: 0 0 8px;"><strong>Location:</strong> ${safeLocation}</p>` : ""}
+      ${!isLandingForm ? `<p style="margin: 0 0 8px;"><strong>How they heard about us:</strong> ${safeHeardAbout}</p>` : ""}
       <p style="margin: 16px 0 4px;"><strong>Message:</strong></p>
       <p style="margin: 0; padding: 12px 16px; background: #f4f1fb; border-left: 3px solid #905bf4; border-radius: 4px;">${safeMessage}</p>
       ${attachmentNote}
@@ -208,15 +228,21 @@ export async function POST(request: Request) {
   `;
 
   const text = [
-    "New website enquiry",
+    `New website enquiry${isLandingForm ? " (landing page)" : ""}`,
     "",
     `Name: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
+    ...(isLandingForm ? [`Postcode: ${postcode}`] : []),
     `Service: ${serviceDisplay}`,
-    `Preferred contact: ${preferredContactLabel}`,
-    `Location: ${locationLabel}`,
-    `How they heard about us: ${heardAboutLabel}`,
+    ...(landingDetail ? [`Landing detail: ${landingDetail}`] : []),
+    ...(!isLandingForm
+      ? [
+          `Preferred contact: ${preferredContactLabel}`,
+          `Location: ${locationLabel}`,
+          `How they heard about us: ${heardAboutLabel}`,
+        ]
+      : []),
     "",
     "Message:",
     message,

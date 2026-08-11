@@ -12,6 +12,7 @@ import {
   ENQUIRY_SERVICES,
   type EnquiryServiceValue,
 } from "@/components/Electrics/enquiryFormOptions";
+import type { ServiceFaqItem } from "@/components/Electrics/ServiceLanding/serviceLandingShared";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -29,6 +30,15 @@ const submitPrimaryBtn =
 
 const MAX_FILES = 5;
 const MAX_TOTAL_BYTES = 10 * 1024 * 1024; // 10MB total across all attachments
+
+type ElectricsContactProps = {
+  /** Homepage section vs dedicated /contact page layout. */
+  variant?: "home" | "page";
+  /** Optional FAQ list shown on the contact page (right column). */
+  faqs?: ServiceFaqItem[];
+  /** Prefill service when arriving from a landing page. */
+  defaultService?: EnquiryServiceValue | "";
+};
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -74,7 +84,12 @@ function IconMail({ className }: { className?: string }) {
   );
 }
 
-export function ElectricsContact() {
+export function ElectricsContact({
+  variant = "home",
+  faqs,
+  defaultService = "",
+}: ElectricsContactProps) {
+  const isPage = variant === "page";
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const accentRef = useRef<HTMLDivElement | null>(null);
   const reduceMotion = useReducedMotion() ?? false;
@@ -86,10 +101,15 @@ export function ElectricsContact() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const [turnstileToken, setTurnstileToken] = useState("");
-  const [selectedService, setSelectedService] = useState<EnquiryServiceValue | "">("");
+  const [selectedService, setSelectedService] = useState<EnquiryServiceValue | "">(defaultService);
   const [preferredContact, setPreferredContact] = useState("");
   const [heardAbout, setHeardAbout] = useState("");
   const [location, setLocation] = useState("");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  useEffect(() => {
+    setSelectedService(defaultService);
+  }, [defaultService]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
@@ -137,8 +157,12 @@ export function ElectricsContact() {
   const charge = reduceMotion ? staticCharge : scrollCharge;
 
   const visibleClass = isVisible ? "is-visible" : "";
-  const textRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-left";
-  const formRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-right";
+  // Homepage: info left / form right. Contact page: form left / info right.
+  // Always enter from the outside edge of the column, not toward the centre.
+  const leftRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-left";
+  const rightRevealClass = isMobile ? "reveal-fade-up" : "reveal-slide-right";
+  const formRevealClass = isPage ? leftRevealClass : rightRevealClass;
+  const textRevealClass = isPage ? rightRevealClass : leftRevealClass;
 
   function handleFilesSelected(event: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(event.target.files ?? []);
@@ -257,7 +281,7 @@ export function ElectricsContact() {
 
       form.reset();
       setFiles([]);
-      setSelectedService("");
+      setSelectedService(defaultService);
       setPreferredContact("");
       setHeardAbout("");
       setLocation("");
@@ -272,318 +296,400 @@ export function ElectricsContact() {
     }
   }
 
-  return (
-    <ElectricsSection id="contact" majorSeam>
-      <div ref={sectionRef}>
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#905bf4] md:text-xs">
-            Need a quote or advice?
+  const asidePadding = isPage ? "lg:pl-10" : "lg:pr-10";
+  const formPadding = isPage ? "lg:pr-10" : "lg:pl-10";
+
+  const asideBlock = (
+    <aside className={`${asidePadding} ${textRevealClass} ${visibleClass}`}>
+      {isPage ? (
+        <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#905bf4]">
+          Contact details
+        </p>
+      ) : null}
+      <div ref={accentRef} className="relative pl-7">
+        <LightningBolt
+          progress={charge}
+          className="pointer-events-none absolute left-0 top-0 h-full w-[18px]"
+        />
+        <div>
+          <p className={labelClass}>Email</p>
+          <a
+            href="mailto:info@excelelectrics.com"
+            className="mt-1.5 block text-base font-semibold text-[color:var(--foreground)] underline-offset-2 hover:underline"
+          >
+            info@excelelectrics.com
+          </a>
+        </div>
+        <div className="mt-6">
+          <p className={labelClass}>Phone</p>
+          <a
+            href="tel:+447730591822"
+            className="mt-1.5 block text-[15px] font-medium text-foreground hover:text-[#905bf4]"
+          >
+            07730591822
+          </a>
+          <p className="text-muted mt-1 text-xs leading-snug">Mon-Fri, 08:00-17:00</p>
+        </div>
+        <div className="mt-6">
+          <address className="text-[15px] font-medium leading-snug text-foreground not-italic">
+            124 City Road
+            <br />
+            London, EC1V 2NX
+          </address>
+          <p className="text-muted mt-1 text-xs leading-snug">Registered office</p>
+        </div>
+        <div className="mt-6">
+          <p className={labelClass}>Coverage</p>
+          <p className="mt-1.5 text-[15px] font-medium leading-snug text-foreground">
+            Essex, Suffolk, Cambridgeshire, Hertfordshire and London
           </p>
-          <h2 className="text-foreground mt-2 text-2xl font-semibold tracking-tight md:text-3xl">Get in touch</h2>
+        </div>
+      </div>
+
+      {isPage && faqs && faqs.length > 0 ? (
+        <div className="mt-10 border-t border-[#4b378c]/25 pt-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#905bf4]">FAQ</p>
+          <h2 className="text-foreground mt-2 text-lg font-semibold tracking-tight">Common questions</h2>
+          <div className="mt-4 divide-y divide-[#4b378c]/25 border-y border-[#4b378c]/25">
+            {faqs.map((item, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={item.question}>
+                  <button
+                    type="button"
+                    className="flex w-full items-start justify-between gap-3 py-3 text-left transition-colors hover:text-[#905bf4]"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                  >
+                    <span className="text-foreground text-sm font-semibold">{item.question}</span>
+                    <span
+                      className={`mt-0.5 shrink-0 text-[#905bf4] transition-transform ${isOpen ? "rotate-45" : ""}`}
+                      aria-hidden
+                    >
+                      +
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-muted pb-3 text-sm leading-relaxed">{item.answer}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+    </aside>
+  );
+
+  const formBlock = (
+    <form
+      className={`flex flex-col gap-4 lg:min-w-0 ${formPadding} ${formRevealClass} ${visibleClass}`}
+      onSubmit={handleSubmit}
+      noValidate
+    >
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="enquiry-company">Company</label>
+        <input id="enquiry-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      <div className="space-y-2">
+        <label htmlFor="enquiry-name" className={labelClass}>
+          Name <span aria-hidden className="text-[#e03131]">*</span>
+        </label>
+        <input
+          id="enquiry-name"
+          name="name"
+          type="text"
+          autoComplete="name"
+          required
+          aria-required="true"
+          className={inputClass}
+          placeholder="Your name"
+        />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+        <div className="space-y-2">
+          <label htmlFor="enquiry-email" className={labelClass}>
+            Email <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <input
+            id="enquiry-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            aria-required="true"
+            className={inputClass}
+            placeholder="you@example.com"
+          />
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="enquiry-phone" className={labelClass}>
+            Phone <span className="font-normal normal-case text-[var(--text-muted)]">(optional)</span>
+          </label>
+          <input
+            id="enquiry-phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            className={inputClass}
+            placeholder="Best number for a call-back"
+          />
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+        <div className="space-y-2">
+          <label htmlFor="enquiry-service" className={labelClass}>
+            Service <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <select
+            id="enquiry-service"
+            name="service"
+            required
+            aria-required="true"
+            value={selectedService}
+            onChange={(event) => setSelectedService(event.target.value as EnquiryServiceValue | "")}
+            className={selectClass}
+          >
+            <option value="" disabled>
+              Select a service
+            </option>
+            {ENQUIRY_SERVICES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="enquiry-preferred-contact" className={labelClass}>
+            Preferred contact <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <select
+            id="enquiry-preferred-contact"
+            name="preferredContact"
+            required
+            aria-required="true"
+            value={preferredContact}
+            onChange={(event) => setPreferredContact(event.target.value)}
+            className={selectClass}
+          >
+            <option value="" disabled>
+              How should we reply?
+            </option>
+            {ENQUIRY_PREFERRED_CONTACT.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {selectedService === "other" && (
+        <div className="space-y-2">
+          <label htmlFor="enquiry-service-other" className={labelClass}>
+            Other service <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <input
+            id="enquiry-service-other"
+            name="serviceOther"
+            type="text"
+            required
+            aria-required="true"
+            className={inputClass}
+            placeholder="Tell us what you need help with"
+          />
+        </div>
+      )}
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+        <div className="space-y-2">
+          <label htmlFor="enquiry-heard-about" className={labelClass}>
+            How did you hear about us? <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <select
+            id="enquiry-heard-about"
+            name="heardAbout"
+            required
+            aria-required="true"
+            value={heardAbout}
+            onChange={(event) => setHeardAbout(event.target.value)}
+            className={selectClass}
+          >
+            <option value="" disabled>
+              Select an option
+            </option>
+            {ENQUIRY_HEARD_ABOUT.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="enquiry-location" className={labelClass}>
+            Location <span aria-hidden className="text-[#e03131]">*</span>
+          </label>
+          <select
+            id="enquiry-location"
+            name="location"
+            required
+            aria-required="true"
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+            className={selectClass}
+          >
+            <option value="" disabled>
+              Select your area
+            </option>
+            {ENQUIRY_LOCATIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <label htmlFor="enquiry-message" className={labelClass}>
+          Message <span aria-hidden className="text-[#e03131]">*</span>
+        </label>
+        <textarea
+          id="enquiry-message"
+          name="message"
+          rows={4}
+          required
+          aria-required="true"
+          className={`${inputClass} min-h-[100px] resize-y`}
+          placeholder="Briefly describe the job or question."
+        />
+      </div>
+      <div className="space-y-2">
+        <label htmlFor="enquiry-attachments" className={labelClass}>
+          Upload supporting images{" "}
+          <span className="font-normal normal-case text-[var(--text-muted)]">(optional)</span>
+        </label>
+        <input
+          id="enquiry-attachments"
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*,.pdf,.doc,.docx"
+          onChange={handleFilesSelected}
+          disabled={files.length >= MAX_FILES}
+          className="block w-full cursor-pointer text-sm text-[var(--text-muted)] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-[#905bf4]/12 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-[#905bf4] hover:file:bg-[#905bf4]/20 disabled:cursor-not-allowed disabled:opacity-60"
+        />
+        {files.length > 0 && (
+          <ul className="space-y-1.5">
+            {files.map((file, index) => (
+              <li
+                key={`${file.name}-${file.size}-${file.lastModified}`}
+                className="flex items-center gap-3 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm"
+              >
+                <span className="min-w-0 flex-1 truncate text-foreground">{file.name}</span>
+                <span className="shrink-0 text-xs text-[var(--text-muted)]">{formatBytes(file.size)}</span>
+                <button
+                  type="button"
+                  onClick={() => removeFile(index)}
+                  aria-label={`Remove ${file.name}`}
+                  className="shrink-0 rounded p-1 text-[var(--text-muted)] transition-colors hover:text-[#e03131]"
+                >
+                  <IconClose className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="text-muted text-xs leading-snug">
+          {files.length >= MAX_FILES
+            ? "Maximum of 5 files reached. Remove one to add another."
+            : "Add any supporting photos of the job. Images, PDFs or Word documents - up to 5 files, 10MB total."}
+        </p>
+      </div>
+      {TURNSTILE_SITE_KEY && (
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={TURNSTILE_SITE_KEY}
+          onSuccess={setTurnstileToken}
+          onExpire={() => setTurnstileToken("")}
+          onError={() => setTurnstileToken("")}
+          options={{ theme: "auto", size: "flexible" }}
+        />
+      )}
+      <button type="submit" className={submitPrimaryBtn} disabled={status === "sending"}>
+        <span className="inline-flex shrink-0" aria-hidden>
+          <IconMail className="h-5 w-5" />
+        </span>
+        {status === "sending" ? "Sending…" : "Send message"}
+      </button>
+
+      <div aria-live="polite" className="min-h-[1.25rem]">
+        {status === "success" && (
+          <p className="text-sm font-medium text-[#2f9e44]">
+            Thanks - your message has been sent. We&apos;ll reply as soon as we can, usually the same day.
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-sm font-medium text-[#e03131]">{errorMessage}</p>
+        )}
+      </div>
+    </form>
+  );
+
+  return (
+    <ElectricsSection
+      id={isPage ? "enquiry-form" : "contact"}
+      majorSeam={isPage}
+      className={isPage ? "!scroll-mt-16 md:!scroll-mt-20" : ""}
+    >
+      <div ref={sectionRef}>
+        <div className={`mx-auto text-center ${isPage ? "max-w-3xl" : "max-w-5xl"}`}>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#905bf4] md:text-xs">
+            {isPage ? "Enquiry form" : "Need a quote or advice?"}
+          </p>
+          {isPage ? (
+            <h2 className="text-foreground mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Tell us about the job
+            </h2>
+          ) : (
+            <h2 className="text-foreground mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Get in touch
+            </h2>
+          )}
           <p className="text-muted mx-auto mt-3 max-w-2xl text-sm leading-relaxed md:text-base">
-            Send a quick message or email us - we&apos;ll reply as soon as we can, usually the same day.
+            {isPage
+              ? "Share a few details about what you need and where you are. We will come back with clear advice and a fixed price, usually the same day."
+              : "Send a quick message or email us - we will reply as soon as we can, usually the same day."}
           </p>
         </div>
 
-        <div className="mx-auto mt-8 max-w-3xl border-t border-[#4b378c]/30 pt-8 md:mt-10 md:pt-10 lg:mt-12 lg:max-w-5xl lg:pt-12">
+        <div
+          className={`mx-auto mt-8 border-t border-[#4b378c]/30 pt-8 md:mt-10 md:pt-10 lg:mt-12 lg:pt-12 ${
+            isPage ? "max-w-6xl" : "max-w-3xl lg:max-w-5xl"
+          }`}
+        >
           <div
-            className="grid gap-8 lg:grid-cols-[minmax(0,240px)_1fr] lg:gap-0 lg:divide-x lg:divide-[#4b378c]/30"
+            className={`grid gap-8 lg:gap-0 lg:divide-x lg:divide-[#4b378c]/30 ${
+              isPage
+                ? "lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]"
+                : "lg:grid-cols-[minmax(0,240px)_1fr]"
+            }`}
           >
-            <aside className={`lg:pr-10 ${textRevealClass} ${visibleClass}`}>
-            <div ref={accentRef} className="relative pl-7">
-              {/* Charging left accent: the same brand lightning bolt as the services section */}
-              <LightningBolt
-                progress={charge}
-                className="pointer-events-none absolute left-0 top-0 h-full w-[18px]"
-              />
-              <div>
-                <p className={labelClass}>Email</p>
-                <a
-                  href="mailto:info@excelelectrics.com"
-                  className="mt-1.5 block text-base font-semibold text-[color:var(--foreground)] underline-offset-2 hover:underline"
-                >
-                  info@excelelectrics.com
-                </a>
-              </div>
-              <div className="mt-6">
-                <p className={labelClass}>Phone</p>
-                <a
-                  href="tel:+447730591822"
-                  className="mt-1.5 block text-[15px] font-medium text-foreground hover:text-[#905bf4]"
-                >
-                  07730591822
-                </a>
-                <p className="text-muted mt-1 text-xs leading-snug">Mon-Fri, 08:00-17:00</p>
-              </div>
-              <div className="mt-6">
-                <address className="text-[15px] font-medium leading-snug text-foreground not-italic">
-                  124 City Road
-                  <br />
-                  London, EC1V 2NX
-                </address>
-                <p className="text-muted mt-1 text-xs leading-snug">Registered office</p>
-              </div>
-            </div>
-          </aside>
-
-            <form
-              className={`flex flex-col gap-4 lg:min-w-0 lg:pl-10 ${formRevealClass} ${visibleClass}`}
-              onSubmit={handleSubmit}
-              noValidate
-            >
-            <div className="hidden" aria-hidden="true">
-              <label htmlFor="enquiry-company">Company</label>
-              <input
-                id="enquiry-company"
-                name="company"
-                type="text"
-                tabIndex={-1}
-                autoComplete="off"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="enquiry-name" className={labelClass}>
-                Name <span aria-hidden className="text-[#e03131]">*</span>
-              </label>
-              <input
-                id="enquiry-name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                required
-                aria-required="true"
-                className={inputClass}
-                placeholder="Your name"
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
-              <div className="space-y-2">
-                <label htmlFor="enquiry-email" className={labelClass}>
-                  Email <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <input
-                  id="enquiry-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  aria-required="true"
-                  className={inputClass}
-                  placeholder="you@example.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="enquiry-phone" className={labelClass}>
-                  Phone <span className="font-normal normal-case text-[var(--text-muted)]">(optional)</span>
-                </label>
-                <input
-                  id="enquiry-phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  className={inputClass}
-                  placeholder="Best number for a call-back"
-                />
-              </div>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
-              <div className="space-y-2">
-                <label htmlFor="enquiry-service" className={labelClass}>
-                  Service <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <select
-                  id="enquiry-service"
-                  name="service"
-                  required
-                  aria-required="true"
-                  value={selectedService}
-                  onChange={(event) =>
-                    setSelectedService(event.target.value as EnquiryServiceValue | "")
-                  }
-                  className={selectClass}
-                >
-                  <option value="" disabled>
-                    Select a service
-                  </option>
-                  {ENQUIRY_SERVICES.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="enquiry-preferred-contact" className={labelClass}>
-                  Preferred contact <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <select
-                  id="enquiry-preferred-contact"
-                  name="preferredContact"
-                  required
-                  aria-required="true"
-                  value={preferredContact}
-                  onChange={(event) => setPreferredContact(event.target.value)}
-                  className={selectClass}
-                >
-                  <option value="" disabled>
-                    How should we reply?
-                  </option>
-                  {ENQUIRY_PREFERRED_CONTACT.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            {selectedService === "other" && (
-              <div className="space-y-2">
-                <label htmlFor="enquiry-service-other" className={labelClass}>
-                  Other service <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <input
-                  id="enquiry-service-other"
-                  name="serviceOther"
-                  type="text"
-                  required
-                  aria-required="true"
-                  className={inputClass}
-                  placeholder="Tell us what you need help with"
-                />
-              </div>
+            {isPage ? (
+              <>
+                {formBlock}
+                {asideBlock}
+              </>
+            ) : (
+              <>
+                {asideBlock}
+                {formBlock}
+              </>
             )}
-            <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
-              <div className="space-y-2">
-                <label htmlFor="enquiry-heard-about" className={labelClass}>
-                  How did you hear about us? <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <select
-                  id="enquiry-heard-about"
-                  name="heardAbout"
-                  required
-                  aria-required="true"
-                  value={heardAbout}
-                  onChange={(event) => setHeardAbout(event.target.value)}
-                  className={selectClass}
-                >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
-                  {ENQUIRY_HEARD_ABOUT.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="enquiry-location" className={labelClass}>
-                  Location <span aria-hidden className="text-[#e03131]">*</span>
-                </label>
-                <select
-                  id="enquiry-location"
-                  name="location"
-                  required
-                  aria-required="true"
-                  value={location}
-                  onChange={(event) => setLocation(event.target.value)}
-                  className={selectClass}
-                >
-                  <option value="" disabled>
-                    Select your area
-                  </option>
-                  {ENQUIRY_LOCATIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="enquiry-message" className={labelClass}>
-                Message <span aria-hidden className="text-[#e03131]">*</span>
-              </label>
-              <textarea
-                id="enquiry-message"
-                name="message"
-                rows={4}
-                required
-                aria-required="true"
-                className={`${inputClass} min-h-[100px] resize-y`}
-                placeholder="Briefly describe the job or question."
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="enquiry-attachments" className={labelClass}>
-                Upload supporting images{" "}
-                <span className="font-normal normal-case text-[var(--text-muted)]">(optional)</span>
-              </label>
-              <input
-                id="enquiry-attachments"
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/*,.pdf,.doc,.docx"
-                onChange={handleFilesSelected}
-                disabled={files.length >= MAX_FILES}
-                className="block w-full cursor-pointer text-sm text-[var(--text-muted)] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-[#905bf4]/12 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-[#905bf4] hover:file:bg-[#905bf4]/20 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-              {files.length > 0 && (
-                <ul className="space-y-1.5">
-                  {files.map((file, index) => (
-                    <li
-                      key={`${file.name}-${file.size}-${file.lastModified}`}
-                      className="flex items-center gap-3 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm"
-                    >
-                      <span className="min-w-0 flex-1 truncate text-foreground">{file.name}</span>
-                      <span className="shrink-0 text-xs text-[var(--text-muted)]">{formatBytes(file.size)}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        aria-label={`Remove ${file.name}`}
-                        className="shrink-0 rounded p-1 text-[var(--text-muted)] transition-colors hover:text-[#e03131]"
-                      >
-                        <IconClose className="h-4 w-4" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <p className="text-muted text-xs leading-snug">
-                {files.length >= MAX_FILES
-                  ? "Maximum of 5 files reached. Remove one to add another."
-                  : "Add any supporting photos of the job. Images, PDFs or Word documents - up to 5 files, 10MB total."}
-              </p>
-            </div>
-            {TURNSTILE_SITE_KEY && (
-              <Turnstile
-                ref={turnstileRef}
-                siteKey={TURNSTILE_SITE_KEY}
-                onSuccess={setTurnstileToken}
-                onExpire={() => setTurnstileToken("")}
-                onError={() => setTurnstileToken("")}
-                options={{ theme: "auto", size: "flexible" }}
-              />
-            )}
-            <button type="submit" className={submitPrimaryBtn} disabled={status === "sending"}>
-              <span className="inline-flex shrink-0" aria-hidden>
-                <IconMail className="h-5 w-5" />
-              </span>
-              {status === "sending" ? "Sending…" : "Send message"}
-            </button>
-
-            <div aria-live="polite" className="min-h-[1.25rem]">
-              {status === "success" && (
-                <p className="text-sm font-medium text-[#2f9e44]">
-                  Thanks - your message has been sent. We&apos;ll reply as soon as we can, usually the same day.
-                </p>
-              )}
-              {status === "error" && (
-                <p className="text-sm font-medium text-[#e03131]">{errorMessage}</p>
-              )}
-            </div>
-            </form>
           </div>
         </div>
       </div>

@@ -32,15 +32,12 @@ type ElectricsSectionProps = {
 };
 
 export function ElectricsSection({ id, children, className = "", muted = false, majorSeam = false }: ElectricsSectionProps) {
-  const shell = muted
-    ? ELECTRICS_SECTION_SHELL_MUTED
-    : majorSeam
-      ? ELECTRICS_SECTION_SHELL_MAJOR_SEAM
-      : ELECTRICS_SECTION_SHELL;
+  const pad = majorSeam ? ELECTRICS_SECTION_PAD_Y_MAJOR_SEAM : ELECTRICS_SECTION_PAD_Y;
+  const bg = muted ? "bg-[var(--surface-muted)]" : "bg-[var(--background)]";
 
   return (
-    <section id={id} className={`${shell} ${className}`}>
-      <div className="mx-auto w-full max-w-7xl px-6">{children}</div>
+    <section id={id} className={`scroll-mt-28 overflow-x-clip ${pad} ${bg} ${className}`}>
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-6">{children}</div>
     </section>
   );
 }

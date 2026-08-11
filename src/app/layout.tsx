@@ -4,6 +4,7 @@ import Script from "next/script";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { DesktopNavbar } from "@/components/Navigation/DesktopNavbar/DesktopNavbar";
 import { MobileNavbar } from "@/components/Navigation/MobileNavbar/MobileNavbar";
+import { ScrollToTopOnNavigate } from "@/components/Navigation/ScrollToTopOnNavigate";
 import { ComingSoonScreen } from "@/components/ComingSoon/ComingSoonScreen";
 import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import { SiteFooter } from "@/components/Footer/SiteFooter";
@@ -26,7 +27,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://excel-electrical.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://excelelectrics.com";
 const siteName = "Excel Electrics";
 const siteDescription =
   "Friendly local electricians for your home: electrical work, fire safety, access systems and garage doors. Essex, Suffolk, Cambridgeshire, London and Hertfordshire.";
@@ -71,7 +72,10 @@ const businessJsonLd = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Excel Electrics - Wire & Fire",
+  title: {
+    default: "Excel Electrics - Wire & Fire",
+    template: "%s | Excel Electrics",
+  },
   description: siteDescription,
   alternates: {
     canonical: "/",
@@ -123,7 +127,8 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang="en-GB"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -149,9 +154,10 @@ export default function RootLayout({
             <ComingSoonScreen />
           ) : (
             <>
+              <ScrollToTopOnNavigate />
               <MobileNavbar />
               <DesktopNavbar />
-              <main className="flex-1">{children}</main>
+              <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
               <SiteFooter />
               <CookieConsentBanner />
             </>

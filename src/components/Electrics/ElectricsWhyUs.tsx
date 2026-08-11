@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import {
   motion,
   useMotionValue,
@@ -10,14 +11,10 @@ import {
   type MotionValue,
 } from "motion/react";
 import { ElectricsSection } from "@/components/Electrics/ElectricsSection";
+import { RevealBlock } from "@/components/Electrics/ServiceLanding/useRevealInView";
+import { WHY_US_REASONS } from "@/components/Electrics/WhyUs/whyUsContent";
 
-const reasons = [
-  "Friendly, tidy and respectful in your home",
-  "Fully qualified and insured",
-  "Clear, honest pricing",
-  "We turn up when we say we will",
-  "No job too small",
-];
+const reasons = WHY_US_REASONS.map((reason) => reason.title);
 
 /** A hairline that charges a brand gradient left → right (clip reveal) as `progress` grows. */
 function ChargeLine({ progress }: { progress: MotionValue<number> }) {
@@ -52,7 +49,7 @@ function WhyRow({ line, index, total, charge }: WhyRowProps) {
   const textX = useTransform(charge, [start, end], [-18, 0], { clamp: true });
 
   return (
-    <li className="relative">
+    <li className="relative overflow-x-clip">
       <div className="flex gap-3 py-3.5 pl-0.5 text-left sm:pl-1 md:gap-4 md:py-4">
         <motion.span
           className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#4b378c]/60 text-[11px] font-bold text-[#905bf4]"
@@ -113,6 +110,17 @@ export function ElectricsWhyUs() {
             <WhyRow key={line} line={line} index={index} total={reasons.length} charge={charge} />
           ))}
         </ul>
+
+        <div className="mt-10 flex justify-center md:mt-12">
+          <RevealBlock variant="rise">
+            <Link
+              href="/why-us"
+              className="inline-flex items-center justify-center rounded-md bg-[#905bf4] px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_-14px_rgba(75,1,184,0.92)] transition hover:bg-[#905bf4] hover:text-white motion-safe:hover:-translate-y-1 motion-safe:active:translate-y-0"
+            >
+              Learn more
+            </Link>
+          </RevealBlock>
+        </div>
       </div>
     </ElectricsSection>
   );

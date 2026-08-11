@@ -1,38 +1,133 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { LegalPolicyTabs } from "@/components/Legal/LegalPolicyTabs";
+import { ELECTRICS_HERO_BOTTOM_ONLY } from "@/components/Electrics/ElectricsSection";
+import {
+  heroSecondaryBtnClass,
+  primaryBtnClass,
+  SERVICE_PHONE_LABEL,
+  SERVICE_PHONE_TEL,
+} from "@/components/Electrics/ServiceLanding/serviceLandingShared";
 
-const ghostBtn =
-  "inline-flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface)] px-5 py-2.5 text-sm font-semibold text-foreground transition hover:border-brand-blue/45 hover:text-brand-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/40";
+const HERO_REVEAL_DURATION_MS = 1050;
+const revealDelay = (ms: number) =>
+  ({ "--reveal-delay": `${ms}ms`, transitionDuration: `${HERO_REVEAL_DURATION_MS}ms` }) as React.CSSProperties;
 
-const primaryBtn =
-  "inline-flex items-center justify-center rounded-md bg-brand-blue px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue/45";
+function IconMail({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
+
+function IconPhone({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  );
+}
 
 export function LegalHero() {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const node = contentRef.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  const visibleClass = isVisible ? "is-visible" : "";
+
   return (
-    <section className="border-b border-[var(--border)] bg-background pt-24 pb-10 md:pt-28 md:pb-12">
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <p className="text-brand-gold text-[11px] font-semibold uppercase tracking-[0.18em] md:text-xs">
-          Legal &amp; policies
-        </p>
-        <h1 className="text-foreground mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-          Terms, privacy &amp; cookies
-        </h1>
-        <p className="text-muted mx-auto mt-4 max-w-xl text-sm leading-relaxed md:text-base">
-          Straightforward information from Excel Electrics about using this website, how we handle your
-          data, and how cookies help us keep things running smoothly.
-        </p>
+    <section className="electrics-hero-min-h-sm relative isolate scroll-mt-0 overflow-hidden bg-black">
+      <Image
+        src="/ExcelElectrics/Excel Home Hero.webp"
+        alt="Excel Electrics home electrical and fire safety specialists"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+      <div className="electrics-hero-overlay absolute inset-0" aria-hidden />
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/" className={ghostBtn}>
-            Back to home
-          </Link>
-          <Link href="/#contact" className={primaryBtn}>
-            Get in touch
-          </Link>
-        </div>
-
-        <div className="mt-10 md:mt-12">
-          <LegalPolicyTabs />
+      <div
+        className={`electrics-hero-min-h-sm relative mx-auto flex w-full max-w-7xl items-end px-6 pt-16 md:items-center ${ELECTRICS_HERO_BOTTOM_ONLY}`}
+      >
+        <div ref={contentRef} className="max-w-3xl space-y-5 md:space-y-6">
+          <p
+            className={`reveal-rise ${visibleClass} text-[11px] font-semibold uppercase tracking-[0.2em] text-[#905bf4] md:text-xs`}
+            style={revealDelay(0)}
+          >
+            Legal &amp; policies
+          </p>
+          <h1
+            className={`reveal-rise ${visibleClass} text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl`}
+            style={revealDelay(130)}
+          >
+            Terms, privacy &amp; cookies
+          </h1>
+          <p
+            className={`reveal-rise ${visibleClass} max-w-2xl text-base leading-relaxed text-slate-200 md:text-lg`}
+            style={revealDelay(260)}
+          >
+            Straightforward information from Excel Electrics about using this website, how we handle
+            your data, and how cookies help us keep things running smoothly.
+          </p>
+          <div
+            className={`reveal-rise ${visibleClass} flex flex-col gap-3 sm:flex-row sm:flex-wrap`}
+            style={revealDelay(390)}
+          >
+            <Link href="/contact" className={primaryBtnClass}>
+              <IconMail className="h-5 w-5" />
+              Get a quote
+            </Link>
+            <a href={SERVICE_PHONE_TEL} className={heroSecondaryBtnClass}>
+              <IconPhone className="h-5 w-5" />
+              Call {SERVICE_PHONE_LABEL}
+            </a>
+          </div>
         </div>
       </div>
     </section>
