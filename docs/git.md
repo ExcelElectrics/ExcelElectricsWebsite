@@ -2,7 +2,7 @@ new prod repo:
 
 git checkout -b excelelectricschanges
 git add .
-git commit -m "feat: multi page site v11"
+git commit -m "feat: footer v12"
 git push -u excelclient excelelectricschanges
 
 old jack repo:

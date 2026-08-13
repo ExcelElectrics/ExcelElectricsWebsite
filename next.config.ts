@@ -2,7 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-  allowedDevOrigins: ["192.168.0.21", "192.168.0.41", "192.168.0.32", "192.168.0.141", "192.168.0.197"],
+  // Wi-Fi LAN IP (en0). Other entries are previous networks / bridge interfaces.
+  allowedDevOrigins: [
+    "192.168.0.197",
+    "192.168.0.21",
+    "192.168.0.41",
+    "192.168.0.32",
+    "192.168.0.141",
+    "192.168.3.1",
+    "192.168.2.1",
+  ],
   async redirects() {
     return [
       // Old hash-style legal URLs cannot be redirected from the server (hash is

@@ -26,6 +26,24 @@ const footerLegalLinks = [
 const socialIconBtnClass =
   "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/70 bg-white/90 shadow-sm transition hover:-translate-y-px hover:border-[#905bf4]/45 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#905bf4]/40 dark:border-white/20 dark:bg-white/[0.08] dark:shadow-[0_1px_4px_rgba(0,0,0,0.2)] dark:hover:border-white/35 dark:hover:bg-white/[0.12]";
 
+const NICEIC_LOGO_SRC = "/ExcelElectrics/niceic-logo.png";
+
+function NiceicBadge({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`inline-flex items-center justify-center rounded-md bg-white px-2 py-1 shadow-sm ring-1 ring-slate-200/80 ${className}`}
+    >
+      <Image
+        src={NICEIC_LOGO_SRC}
+        alt="NICEIC Approved Contractor"
+        width={120}
+        height={58}
+        className="h-7 w-auto object-contain md:h-8"
+      />
+    </div>
+  );
+}
+
 export function SiteFooter() {
   return (
     <footer className="electrics-small-jobs-gradient-bg border-t border-[color:var(--electrics-nav-footer-edge)]">
@@ -84,64 +102,66 @@ export function SiteFooter() {
                 {FOOTER_PHONE_LABEL}
               </a>
             </p>
+            <address className="text-xs leading-snug not-italic">
+              124 City Road
+              <br />
+              London, EC1V 2NX
+            </address>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2" aria-label="Excel Electrics on social media">
-            <a
-              href={FOOTER_LINKEDIN_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${socialIconBtnClass} h-8 w-8`}
-              aria-label="Excel Electrics on LinkedIn"
-            >
-              <Image
-                src="/icons/linkedin.svg"
-                alt=""
-                width={16}
-                height={16}
-                unoptimized
-                className="h-4 w-4 object-contain"
-              />
-            </a>
-            <a
-              href={FOOTER_INSTAGRAM_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${socialIconBtnClass} h-8 w-8`}
-              aria-label="Excel Electrics on Instagram"
-            >
-              <Image
-                src="/icons/instagram.svg"
-                alt=""
-                width={16}
-                height={16}
-                unoptimized
-                className="h-4 w-4 object-contain"
-              />
-            </a>
-            <a
-              href={FOOTER_FACEBOOK_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${socialIconBtnClass} h-8 w-8`}
-              aria-label="Excel Electrics on Facebook"
-            >
-              <Image
-                src="/icons/facebook.svg"
-                alt=""
-                width={16}
-                height={16}
-                unoptimized
-                className="h-4 w-4 object-contain"
-              />
-            </a>
+          <div className="flex flex-col items-start gap-3">
+            <div className="flex flex-wrap items-center gap-2" aria-label="Excel Electrics on social media">
+              <a
+                href={FOOTER_LINKEDIN_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${socialIconBtnClass} h-8 w-8`}
+                aria-label="Excel Electrics on LinkedIn"
+              >
+                <Image
+                  src="/icons/linkedin.svg"
+                  alt=""
+                  width={16}
+                  height={16}
+                  unoptimized
+                  className="h-4 w-4 object-contain"
+                />
+              </a>
+              <a
+                href={FOOTER_INSTAGRAM_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${socialIconBtnClass} h-8 w-8`}
+                aria-label="Excel Electrics on Instagram"
+              >
+                <Image
+                  src="/icons/instagram.svg"
+                  alt=""
+                  width={16}
+                  height={16}
+                  unoptimized
+                  className="h-4 w-4 object-contain"
+                />
+              </a>
+              <a
+                href={FOOTER_FACEBOOK_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${socialIconBtnClass} h-8 w-8`}
+                aria-label="Excel Electrics on Facebook"
+              >
+                <Image
+                  src="/icons/facebook.svg"
+                  alt=""
+                  width={16}
+                  height={16}
+                  unoptimized
+                  className="h-4 w-4 object-contain"
+                />
+              </a>
+            </div>
+            <NiceicBadge />
           </div>
-
-          <address className="text-xs leading-snug not-italic" style={{ color: "var(--foreground)" }}>
-            124 City Road
-            <br />
-            London, EC1V 2NX
-          </address>
 
           <div
             className="border-t border-[color:var(--electrics-nav-footer-edge)] pt-4 text-xs"
@@ -165,58 +185,61 @@ export function SiteFooter() {
               Friendly, local electricians for your home - electrics, fire safety, access and automation.
               Clear pricing and dependable service across Essex, Suffolk, Cambridgeshire, London and Hertfordshire.
             </p>
-            <div
-              className="mt-4 flex shrink-0 flex-wrap items-center gap-2"
-              aria-label="Excel Electrics on social media"
-            >
-              <a
-                href={FOOTER_LINKEDIN_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconBtnClass}
-                aria-label="Excel Electrics on LinkedIn"
+            <div className="mt-4 flex shrink-0 flex-col items-start gap-3">
+              <div
+                className="flex flex-wrap items-center gap-2"
+                aria-label="Excel Electrics on social media"
               >
-                <Image
-                  src="/icons/linkedin.svg"
-                  alt=""
-                  width={18}
-                  height={18}
-                  unoptimized
-                  className="h-[18px] w-[18px] object-contain"
-                />
-              </a>
-              <a
-                href={FOOTER_INSTAGRAM_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconBtnClass}
-                aria-label="Excel Electrics on Instagram"
-              >
-                <Image
-                  src="/icons/instagram.svg"
-                  alt=""
-                  width={18}
-                  height={18}
-                  unoptimized
-                  className="h-[18px] w-[18px] object-contain"
-                />
-              </a>
-              <a
-                href={FOOTER_FACEBOOK_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={socialIconBtnClass}
-                aria-label="Excel Electrics on Facebook"
-              >
-                <Image
-                  src="/icons/facebook.svg"
-                  alt=""
-                  width={18}
-                  height={18}
-                  unoptimized
-                  className="h-[18px] w-[18px] object-contain"
-                />
-              </a>
+                <a
+                  href={FOOTER_LINKEDIN_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={socialIconBtnClass}
+                  aria-label="Excel Electrics on LinkedIn"
+                >
+                  <Image
+                    src="/icons/linkedin.svg"
+                    alt=""
+                    width={18}
+                    height={18}
+                    unoptimized
+                    className="h-[18px] w-[18px] object-contain"
+                  />
+                </a>
+                <a
+                  href={FOOTER_INSTAGRAM_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={socialIconBtnClass}
+                  aria-label="Excel Electrics on Instagram"
+                >
+                  <Image
+                    src="/icons/instagram.svg"
+                    alt=""
+                    width={18}
+                    height={18}
+                    unoptimized
+                    className="h-[18px] w-[18px] object-contain"
+                  />
+                </a>
+                <a
+                  href={FOOTER_FACEBOOK_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={socialIconBtnClass}
+                  aria-label="Excel Electrics on Facebook"
+                >
+                  <Image
+                    src="/icons/facebook.svg"
+                    alt=""
+                    width={18}
+                    height={18}
+                    unoptimized
+                    className="h-[18px] w-[18px] object-contain"
+                  />
+                </a>
+              </div>
+              <NiceicBadge />
             </div>
           </div>
 
