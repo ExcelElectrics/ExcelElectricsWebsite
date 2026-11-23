@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const DEFAULT_OG_IMAGE = "/ExcelElectrics/NewLogo/ExcelWhatsapp.png";
+const DEFAULT_OG_IMAGE = "/ExcelElectrics/photos/og-excel-electrics-van.jpg";
 
 type PageMetaInput = {
   title: string;
@@ -18,7 +18,7 @@ export function buildPageMetadata({
   description,
   path,
   image = DEFAULT_OG_IMAGE,
-  imageAlt = "Excel Electrics - Wire & Fire",
+  imageAlt = "Excel Electrics van on a residential driveway",
   noIndex = false,
 }: PageMetaInput): Metadata {
   const brandedTitle = title.includes("Excel Electrics") ? title : `${title} | Excel Electrics`;
@@ -87,6 +87,7 @@ export function serviceJsonLd(input: {
     image: input.image ? `${siteUrl}${input.image}` : undefined,
     provider: {
       "@type": "Electrician",
+      "@id": `${siteUrl}/#business`,
       name: "Excel Electrics",
       url: siteUrl,
     },

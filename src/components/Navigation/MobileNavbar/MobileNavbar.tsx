@@ -9,8 +9,9 @@ import { ElectricsLogo } from "@/components/Brand/ElectricsLogo";
 import { SERVICE_NAV_LINKS } from "@/components/Navigation/serviceNavLinks";
 
 const navLinks = [
-  { label: "Why us", href: "/why-us" },
   { label: "Areas", href: "/areas" },
+  { label: "Projects", href: "/projects" },
+  { label: "Why us", href: "/why-us" },
   { label: "Contact", href: "/contact" },
 ];
 

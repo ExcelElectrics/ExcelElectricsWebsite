@@ -83,8 +83,8 @@ export function WhyUsHero() {
   return (
     <section className="electrics-hero-min-h-sm relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/services/fire/fire-hero.webp"
-        alt="Excel Electrics engineer carrying out careful electrical work in a home"
+        src="/ExcelElectrics/photos/why-us-levelling-back-box.webp"
+        alt="Excel Electrics engineer levelling a back box before fixing it"
         fill
         priority
         sizes="100vw"
@@ -106,9 +106,7 @@ export function WhyUsHero() {
             className={`reveal-rise ${visibleClass} text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl`}
             style={revealDelay(130)}
           >
-            Your home. Your safety.
-            <br />
-            <span className="text-[#905bf4]">Done properly.</span>
+            Why choose us
           </h1>
           <p
             className={`reveal-rise ${visibleClass} max-w-2xl text-base leading-relaxed text-slate-200 md:text-lg`}

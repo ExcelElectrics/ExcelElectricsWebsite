@@ -16,8 +16,8 @@ export function WhyUsIntro() {
           className="relative aspect-[4/3] overflow-hidden rounded-md lg:aspect-auto lg:min-h-[420px]"
         >
           <Image
-            src="/ExcelElectrics/services/electrical/electrical-hero.webp"
-            alt="Excel Electrics engineer carrying out careful electrical work in a home"
+            src="/ExcelElectrics/photos/why-us-engineer-with-cable.webp"
+            alt="Excel Electrics engineer preparing cable for a new door entry handset"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"

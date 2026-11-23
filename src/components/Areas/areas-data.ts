@@ -43,7 +43,7 @@ export const locations: LocationPageData[] = [
       "Maldon",
       "Saffron Walden",
     ],
-    heroImage: "/ExcelElectrics/services/electrical/electrical-hero.webp",
+    heroImage: "/ExcelElectrics/photos/electrical-loft-cable-run.webp",
     heroImageAlt: "Excel Electrics electrical installation work in Essex",
     heroDescription:
       "Domestic electrical work, EV charging, fire safety, access systems, gates and garage doors across Essex, from Chelmsford and Colchester to Harlow, Basildon and the coast.",
@@ -179,7 +179,7 @@ export const locations: LocationPageData[] = [
       "Cheshunt",
       "Rickmansworth",
     ],
-    heroImage: "/ExcelElectrics/services/gates/gates-hero.webp",
+    heroImage: "/ExcelElectrics/photos/gates-engineer-at-gate-pier.webp",
     heroImageAlt: "Automated electric gates installed by Excel Electrics in Hertfordshire",
     heroDescription:
       "Electrical work, gates, garage doors, access control and EV charging across Hertfordshire, including St Albans, Watford, Stevenage, Hertford and Bishop's Stortford.",
@@ -227,7 +227,7 @@ export const locations: LocationPageData[] = [
       "Clerkenwell",
       "Finsbury",
     ],
-    heroImage: "/ExcelElectrics/services/access/access-hero.webp",
+    heroImage: "/ExcelElectrics/photos/access-video-entry-monitor.webp",
     heroImageAlt: "Access control and electrical work by Excel Electrics in London",
     heroDescription:
       "Domestic electrical work, access systems, fire safety and EV charging across central London boroughs including Westminster, Camden, Islington, Southwark and the City.",
@@ -284,7 +284,7 @@ export const locations: LocationPageData[] = [
       "Wandsworth",
       "Hammersmith and Fulham",
     ],
-    heroImage: "/ExcelElectrics/Excel Home Hero.webp",
+    heroImage: "/ExcelElectrics/photos/home-engineer-wiring-access-panel.webp",
     heroImageAlt: "Excel Electrics covering homes across Greater London",
     heroDescription:
       "Friendly, local electrical support across Greater London boroughs, from Barnet and Enfield to Croydon, Harrow, Bromley, Newham and beyond.",

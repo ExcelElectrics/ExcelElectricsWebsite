@@ -12,7 +12,7 @@ export const SERVICE_NAV_LINKS = [
   {
     label: "Electrical work",
     href: "/services/electrical-work",
-    imageSrc: "/ExcelElectrics/services/electrical/electrical-hero.webp",
+    imageSrc: "/ExcelElectrics/photos/electrical-loft-cable-run.webp",
     imageAlt: "Domestic electrical work in a home",
     blurb: "Fault finding, sockets, lighting, consumer units, EICRs and rewires.",
   },
@@ -26,14 +26,14 @@ export const SERVICE_NAV_LINKS = [
   {
     label: "Access & security",
     href: "/services/access-security",
-    imageSrc: "/ExcelElectrics/services/access/access-hero.webp",
+    imageSrc: "/ExcelElectrics/photos/access-video-entry-monitor.webp",
     imageAlt: "Home access control and door entry systems",
     blurb: "Intercoms, keypads, fobs and access control for homes and flats.",
   },
   {
     label: "Gates, garage doors & bollards",
     href: "/services/gates-garage-bollards",
-    imageSrc: "/ExcelElectrics/services/gates/gates-hero.webp",
+    imageSrc: "/ExcelElectrics/photos/gates-engineer-at-gate-pier.webp",
     imageAlt: "Electric gates and automated garage doors",
     blurb: "Electric gates, garage doors and rising bollards, new or repaired.",
   },
