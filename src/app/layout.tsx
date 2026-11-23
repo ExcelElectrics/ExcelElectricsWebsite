@@ -31,11 +31,12 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://excelelectrics.com"
 const siteName = "Excel Electrics";
 const siteDescription =
   "Friendly local electricians for your home: electrical work, fire safety, access systems and garage doors. Essex, Suffolk, Cambridgeshire, London and Hertfordshire.";
-const socialImage = "/ExcelElectrics/NewLogo/ExcelWhatsapp.png";
+const socialImage = "/ExcelElectrics/photos/og-excel-electrics-van.jpg";
 
 const businessJsonLd = {
   "@context": "https://schema.org",
   "@type": "Electrician",
+  "@id": `${siteUrl}/#business`,
   name: siteName,
   legalName: "Excel Fire Ltd",
   alternateName: "Excel Fire Ltd, trading as Excel Electrics",
@@ -53,6 +54,17 @@ const businessJsonLd = {
     addressCountry: "GB",
   },
   areaServed: ["Essex", "Suffolk", "Cambridgeshire", "Hertfordshire", "London", "Greater London"],
+  sameAs: [
+    "https://www.facebook.com/profile.php?id=61591784010806",
+    "https://www.instagram.com/excel_electrics/",
+    "https://www.linkedin.com/company/excelelectrics/",
+  ],
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "Certification",
+    name: "NICEIC Approved Contractor",
+    recognizedBy: { "@type": "Organization", name: "NICEIC", url: "https://www.niceic.com" },
+  },
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -94,7 +106,7 @@ export const metadata: Metadata = {
         url: socialImage,
         width: 1200,
         height: 630,
-        alt: "Excel Electrics - Wire & Fire logo",
+        alt: "Excel Electrics van on a residential driveway",
       },
     ],
   },

@@ -12,8 +12,9 @@ const FOOTER_LEGAL_DISCLAIMER = "Excel Fire Ltd, trading as Excel Electrics.";
 
 const footerLinks = [
   { label: "Services", href: "/services" },
-  { label: "Why us", href: "/why-us" },
   { label: "Areas", href: "/areas" },
+  { label: "Projects", href: "/projects" },
+  { label: "Why us", href: "/why-us" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -83,8 +83,8 @@ export function ContactHero() {
   return (
     <section className="electrics-hero-min-h-sm relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/services/access/access-hero.webp"
-        alt="Excel Electrics engineer on site ready to help with your enquiry"
+        src="/ExcelElectrics/photos/contact-excel-electrics-van.webp"
+        alt="Excel Electrics van on a residential driveway"
         fill
         priority
         sizes="100vw"

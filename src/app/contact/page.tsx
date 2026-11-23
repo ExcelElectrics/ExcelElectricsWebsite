@@ -14,8 +14,8 @@ export const metadata: Metadata = buildPageMetadata({
   title,
   description,
   path: "/contact",
-  image: "/ExcelElectrics/Excel Home Hero.webp",
-  imageAlt: "Excel Electrics home electrical and fire safety specialists",
+  image: "/ExcelElectrics/photos/contact-excel-electrics-van.webp",
+  imageAlt: "Excel Electrics van on a residential driveway",
 });
 
 const faqJsonLd = {

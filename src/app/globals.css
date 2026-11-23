@@ -366,6 +366,12 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
+/* Hero copy is visible from first paint (better LCP); it still eases up into place on load. */
+section:has(.electrics-hero-overlay) .reveal-rise:not(.is-visible) {
+  opacity: 1;
+  transform: translate3d(0, 12px, 0);
+}
+
 @keyframes accreditations-marquee {
   from {
     transform: translateX(0);

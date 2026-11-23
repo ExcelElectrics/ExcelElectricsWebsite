@@ -47,7 +47,7 @@ const pillars = [
     ],
   },
   {
-    title: "Garage doors & electric gates",
+    title: "Garage doors & gates",
     href: "/services/gates-garage-bollards",
     items: [
       "Automated garage doors",

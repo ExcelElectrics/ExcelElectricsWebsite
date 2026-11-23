@@ -91,8 +91,8 @@ export function ElectricsHero() {
   return (
     <section className="electrics-hero-min-h relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/Excel Home Hero.webp"
-        alt="Electric vehicle charger installation at a home"
+        src="/ExcelElectrics/photos/home-engineer-wiring-access-panel.webp"
+        alt="Excel Electrics engineer wiring an access control panel at a residential entrance"
         fill
         priority
         sizes="100vw"
@@ -119,7 +119,7 @@ export function ElectricsHero() {
             className={`reveal-rise ${visibleClass} text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl`}
             style={revealDelay(130)}
           >
-            <span className="block">Keeping your home</span>
+            <span className="block">Keeping your home</span>{" "}
             <span className="block text-[#905bf4]">safe &amp; powered</span>
           </h1>
 

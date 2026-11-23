@@ -83,8 +83,8 @@ export function ServicesHero() {
   return (
     <section className="electrics-hero-min-h-sm relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/services/gates/gates-hero.webp"
-        alt="Automated gates and exterior lighting on a modern home"
+        src="/ExcelElectrics/photos/services-drilling-gate-pier.webp"
+        alt="Excel Electrics engineer drilling a gate pier for new access equipment"
         fill
         priority
         sizes="100vw"

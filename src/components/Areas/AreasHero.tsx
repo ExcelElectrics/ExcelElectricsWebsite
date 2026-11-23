@@ -63,8 +63,8 @@ export function AreasHero() {
   return (
     <section className="electrics-hero-min-h-sm relative isolate scroll-mt-0 overflow-hidden bg-black">
       <Image
-        src="/ExcelElectrics/services/electrical/electrical-hero.webp"
-        alt="Modern home lighting and electrics across the areas we cover"
+        src="/ExcelElectrics/photos/areas-excel-electrics-van-side.webp"
+        alt="Excel Electrics van out on the road across the areas we cover"
         fill
         priority
         sizes="100vw"

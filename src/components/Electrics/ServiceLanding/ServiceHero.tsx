@@ -26,6 +26,8 @@ type ServiceHeroProps = {
   imageAlt: string;
   primaryCtaLabel: string;
   formHref?: string;
+  /** Extra black tint (0–1) under the brand overlay, for very bright photos. */
+  darken?: number;
 };
 
 function IconMail({ className }: { className?: string }) {
@@ -76,6 +78,7 @@ export function ServiceHero({
   imageAlt,
   primaryCtaLabel,
   formHref = "/contact#enquiry-form",
+  darken,
 }: ServiceHeroProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -117,6 +120,7 @@ export function ServiceHero({
         sizes="100vw"
         className="object-cover object-center"
       />
+      {darken ? <div className="absolute inset-0 bg-black" style={{ opacity: darken }} aria-hidden /> : null}
       <div className="electrics-hero-overlay absolute inset-0" aria-hidden />
 
       <div
@@ -137,6 +141,7 @@ export function ServiceHero({
             {title}
             {titleAccent ? (
               <>
+                {" "}
                 <br />
                 <span className="text-[#905bf4]">{titleAccent}</span>
               </>

@@ -12,7 +12,7 @@ export const metadata: Metadata = buildPageMetadata({
   title,
   description,
   path: "/areas",
-  image: "/ExcelElectrics/services/electrical/electrical-hero.webp",
+  image: "/ExcelElectrics/photos/areas-excel-electrics-van-side.webp",
   imageAlt: "Excel Electrics coverage across the East of England and London",
 });
 

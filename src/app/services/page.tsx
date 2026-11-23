@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ServicesHero } from "@/components/Electrics/ServicesIndex/ServicesHero";
 import { ServicesIndexGrid } from "@/components/Electrics/ServicesIndex/ServicesIndexGrid";
+import { ServicesCommercialBand } from "@/components/Electrics/ServicesIndex/ServicesCommercialBand";
 import { ServiceClosingCta } from "@/components/Electrics/ServiceLanding/ServiceClosingCta";
 import { breadcrumbJsonLd, buildPageMetadata, JsonLd } from "@/lib/seo";
 
@@ -12,8 +13,8 @@ export const metadata: Metadata = buildPageMetadata({
   title,
   description,
   path: "/services",
-  image: "/ExcelElectrics/services/electrical/electrical-hero.webp",
-  imageAlt: "Domestic electrical work by Excel Electrics",
+  image: "/ExcelElectrics/photos/services-drilling-gate-pier.webp",
+  imageAlt: "Excel Electrics engineer drilling a gate pier for new access equipment",
 });
 
 export default function ServicesIndexPage() {
@@ -27,6 +28,7 @@ export default function ServicesIndexPage() {
       />
       <ServicesHero />
       <ServicesIndexGrid />
+      <ServicesCommercialBand />
       <ServiceClosingCta
         title="Not sure which service you need?"
         lead="Tell us what is happening and your postcode. We will come back with clear advice and a fixed price, usually the same day."
