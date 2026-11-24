@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://excelelectrics.com";
 
 /** Bump when page content meaningfully changes (a per-request "now" tells crawlers everything always changed). */
-const SITE_LAST_UPDATED = "2026-11-23";
+const SITE_LAST_UPDATED = "2026-11-24";
 const LEGAL_LAST_UPDATED = "2026-08-13";
 
 type SitemapEntry = {
@@ -59,6 +59,7 @@ function buildEntries(): SitemapEntry[] {
     ...servicePages,
     { url: `${siteUrl}/why-us`, changeFrequency: "monthly", priority: 0.85 },
     { url: `${siteUrl}/projects`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${siteUrl}/excel-fire`, changeFrequency: "yearly", priority: 0.5 },
     ...projectPages,
     { url: `${siteUrl}/areas`, changeFrequency: "monthly", priority: 0.85 },
     ...areaPages,

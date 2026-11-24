@@ -15,6 +15,7 @@ const footerLinks = [
   { label: "Areas", href: "/areas" },
   { label: "Projects", href: "/projects" },
   { label: "Why us", href: "/why-us" },
+  { label: "Excel Fire", href: "/excel-fire" },
   { label: "Contact", href: "/contact" },
 ];
 

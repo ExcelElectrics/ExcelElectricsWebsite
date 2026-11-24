@@ -16,6 +16,7 @@ import {
   GTM_CONTAINER_ID,
 } from "@/components/CookieConsent/googleConsentMode";
 import "./globals.css";
+import { NICEIC_SCOPES } from "@/components/Accreditations/accreditations";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,13 +59,27 @@ const businessJsonLd = {
     "https://www.facebook.com/profile.php?id=61591784010806",
     "https://www.instagram.com/excel_electrics/",
     "https://www.linkedin.com/company/excelelectrics/",
+    "https://www.google.com/maps?cid=15544696597586973141",
   ],
-  hasCredential: {
-    "@type": "EducationalOccupationalCredential",
-    credentialCategory: "Certification",
-    name: "NICEIC Approved Contractor",
-    recognizedBy: { "@type": "Organization", name: "NICEIC", url: "https://www.niceic.com" },
+  hasMap: "https://www.google.com/maps?cid=15544696597586973141",
+  parentOrganization: {
+    "@type": "Organization",
+    name: "Excel Fire Ltd",
+    url: "https://excelfireltd.com",
   },
+  hasCredential: [
+    ...NICEIC_SCOPES.map((scope) => ({
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Certification",
+      name: `NICEIC ${scope.name} (${scope.number})`,
+      recognizedBy: { "@type": "Organization", name: "NICEIC", url: "https://www.niceic.com" },
+    })),
+    ...["CHAS", "Constructionline Gold", "SMAS Worksafe"].map((name) => ({
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Certification",
+      name,
+    })),
+  ],
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",

@@ -6,13 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggleButton } from "@/components/Theme/ThemeToggleButton";
 import { ElectricsLogo } from "@/components/Brand/ElectricsLogo";
-import { SERVICE_NAV_LINKS } from "@/components/Navigation/serviceNavLinks";
+import { ABOUT_NAV_LINKS, SERVICE_NAV_LINKS } from "@/components/Navigation/serviceNavLinks";
 
 const navLinks = [
   { label: "Areas", href: "/areas" },
   { label: "Projects", href: "/projects" },
-  { label: "Why us", href: "/why-us" },
-  { label: "Contact", href: "/contact" },
 ];
 
 const SCROLL_LOCK_KEYS = new Set([
@@ -24,6 +22,9 @@ const SCROLL_LOCK_KEYS = new Set([
   "End",
   " ",
 ]);
+
+const mobileLinkClass =
+  "text-foreground rounded-md px-3 py-3 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]";
 
 function ChevronDown({ className }: { className?: string }) {
   return (
@@ -47,11 +48,13 @@ export function MobileNavbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setServicesOpen(false);
+        setAboutOpen(false);
         setIsOpen(false);
       }
     };
@@ -97,12 +100,16 @@ export function MobileNavbar() {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) setServicesOpen(false);
+    if (!isOpen) {
+      setServicesOpen(false);
+      setAboutOpen(false);
+    }
   }, [isOpen]);
 
   useEffect(() => {
     setIsOpen(false);
     setServicesOpen(false);
+    setAboutOpen(false);
   }, [pathname]);
 
   const close = () => setIsOpen(false);
@@ -216,20 +223,57 @@ export function MobileNavbar() {
               ) : null}
 
               {navLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => {
-                    close();
-                    if (item.href === "/contact" && pathname === "/contact") {
-                      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-                    }
-                  }}
-                  className="text-foreground rounded-md px-3 py-3 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]"
-                >
+                <Link key={item.href} href={item.href} onClick={close} className={mobileLinkClass}>
                   {item.label}
                 </Link>
               ))}
+
+              <div className="flex items-center">
+                <Link href="/why-us" onClick={close} className={`${mobileLinkClass} flex-1`}>
+                  Why us
+                </Link>
+                <button
+                  type="button"
+                  aria-label="About pages"
+                  aria-expanded={aboutOpen}
+                  onClick={() => setAboutOpen((open) => !open)}
+                  className="text-foreground inline-flex h-11 w-11 items-center justify-center rounded-md transition-colors hover:text-[#905bf4]"
+                >
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${aboutOpen ? "rotate-180" : ""}`} />
+                </button>
+              </div>
+
+              {aboutOpen ? (
+                <div className="mb-2 space-y-1 border-l border-[#4b378c]/30 pl-3">
+                  {ABOUT_NAV_LINKS.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={close}
+                      className="flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-[#905bf4]/08"
+                    >
+                      <span className="relative h-11 w-14 shrink-0 overflow-hidden rounded-sm">
+                        <Image src={item.imageSrc} alt="" fill sizes="56px" className="object-cover" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="text-foreground block text-sm font-semibold leading-snug">{item.label}</span>
+                        <span className="text-muted mt-0.5 block text-xs leading-snug line-clamp-2">{item.blurb}</span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+
+              <Link
+                href="/contact"
+                onClick={() => {
+                  close();
+                  if (pathname === "/contact") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+                }}
+                className={mobileLinkClass}
+              >
+                Contact
+              </Link>
               <Link
                 href="/contact#enquiry-form"
                 onClick={() => {

@@ -6,13 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggleButton } from "@/components/Theme/ThemeToggleButton";
 import { ElectricsLogo } from "@/components/Brand/ElectricsLogo";
-import { SERVICE_NAV_LINKS } from "@/components/Navigation/serviceNavLinks";
+import { ABOUT_NAV_LINKS, SERVICE_NAV_LINKS } from "@/components/Navigation/serviceNavLinks";
 
 const navLinks = [
   { label: "Areas", href: "/areas" },
   { label: "Projects", href: "/projects" },
-  { label: "Why us", href: "/why-us" },
-  { label: "Contact", href: "/contact" },
 ];
 
 function ChevronDown({ className }: { className?: string }) {
@@ -33,20 +31,35 @@ function ChevronDown({ className }: { className?: string }) {
   );
 }
 
-export function DesktopNavbar() {
-  const pathname = usePathname();
-  const [servicesOpen, setServicesOpen] = useState(false);
+type DropdownItem = { label: string; href: string; imageSrc: string; blurb: string };
+
+function NavDropdown({
+  label,
+  href,
+  buttonLabel,
+  items,
+  footerLink,
+  widthClass = "w-[22rem]",
+}: {
+  label: string;
+  href: string;
+  buttonLabel: string;
+  items: readonly DropdownItem[];
+  footerLink?: { label: string; href: string };
+  widthClass?: string;
+}) {
+  const [open, setOpen] = useState(false);
   const menuId = useId();
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!servicesOpen) return;
+    if (!open) return;
 
     const onPointerDown = (event: MouseEvent) => {
-      if (!wrapRef.current?.contains(event.target as Node)) setServicesOpen(false);
+      if (!wrapRef.current?.contains(event.target as Node)) setOpen(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setServicesOpen(false);
+      if (event.key === "Escape") setOpen(false);
     };
 
     document.addEventListener("mousedown", onPointerDown);
@@ -55,7 +68,75 @@ export function DesktopNavbar() {
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [servicesOpen]);
+  }, [open]);
+
+  return (
+    <div ref={wrapRef} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <div className="flex items-center">
+        <Link
+          href={href}
+          className="text-foreground rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]"
+        >
+          {label}
+        </Link>
+        <button
+          type="button"
+          aria-label={buttonLabel}
+          aria-expanded={open}
+          aria-controls={menuId}
+          onClick={() => setOpen((value) => !value)}
+          className="text-foreground -ml-1 inline-flex h-9 w-8 items-center justify-center rounded-md transition-colors hover:text-[#905bf4]"
+        >
+          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        </button>
+      </div>
+
+      {open ? (
+        <div id={menuId} role="menu" className={`absolute left-0 top-full z-50 ${widthClass} pt-1`}>
+          <div className="overflow-hidden rounded-md border border-[var(--border)] bg-[var(--surface)] py-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.45)] dark:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.65)]">
+            {items.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-[#905bf4]/08"
+              >
+                <span className="relative h-11 w-14 shrink-0 overflow-hidden rounded-sm">
+                  <Image src={item.imageSrc} alt="" fill sizes="56px" className="object-cover" />
+                </span>
+                <span className="min-w-0">
+                  <span className="text-foreground block text-sm font-semibold leading-snug hover:text-[#905bf4]">
+                    {item.label}
+                  </span>
+                  <span className="text-muted mt-0.5 block text-xs leading-snug line-clamp-2">{item.blurb}</span>
+                </span>
+              </Link>
+            ))}
+            {footerLink ? (
+              <div className="mt-1 border-t border-[var(--border)] px-3 pt-2">
+                <Link
+                  href={footerLink.href}
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className="block py-2 text-sm font-semibold text-[#905bf4] transition-colors hover:text-[#4b378c]"
+                >
+                  {footerLink.label}
+                </Link>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+const navLinkClass =
+  "text-foreground rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]";
+
+export function DesktopNavbar() {
+  const pathname = usePathname();
 
   return (
     <header className="electrics-desktop-nav sticky top-0 z-[70] hidden lg:block">
@@ -65,96 +146,31 @@ export function DesktopNavbar() {
         </Link>
 
         <nav aria-label="Primary navigation" className="flex items-center gap-1 xl:gap-2">
-          <div
-            ref={wrapRef}
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <div className="flex items-center">
-              <Link
-                href="/services"
-                className="text-foreground rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]"
-              >
-                Services
-              </Link>
-              <button
-                type="button"
-                aria-label="Service pages"
-                aria-expanded={servicesOpen}
-                aria-controls={menuId}
-                onClick={() => setServicesOpen((open) => !open)}
-                className="text-foreground -ml-1 inline-flex h-9 w-8 items-center justify-center rounded-md transition-colors hover:text-[#905bf4]"
-              >
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-            </div>
-
-            {servicesOpen ? (
-              <div
-                id={menuId}
-                role="menu"
-                className="absolute left-0 top-full z-50 w-[22rem] pt-1"
-              >
-                <div className="overflow-hidden rounded-md border border-[var(--border)] bg-[var(--surface)] py-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.45)] dark:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.65)]">
-                  {SERVICE_NAV_LINKS.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      role="menuitem"
-                      onClick={() => setServicesOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-[#905bf4]/08"
-                    >
-                      <span className="relative h-11 w-14 shrink-0 overflow-hidden rounded-sm">
-                        <Image
-                          src={item.imageSrc}
-                          alt=""
-                          fill
-                          sizes="56px"
-                          className="object-cover"
-                        />
-                      </span>
-                      <span className="min-w-0">
-                        <span className="text-foreground block text-sm font-semibold leading-snug hover:text-[#905bf4]">
-                          {item.label}
-                        </span>
-                        <span className="text-muted mt-0.5 block text-xs leading-snug line-clamp-2">
-                          {item.blurb}
-                        </span>
-                      </span>
-                    </Link>
-                  ))}
-                  <div className="mt-1 border-t border-[var(--border)] px-3 pt-2">
-                    <Link
-                      href="/services"
-                      role="menuitem"
-                      onClick={() => setServicesOpen(false)}
-                      className="block py-2 text-sm font-semibold text-[#905bf4] transition-colors hover:text-[#4b378c]"
-                    >
-                      View all services
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </div>
+          <NavDropdown
+            label="Services"
+            href="/services"
+            buttonLabel="Service pages"
+            items={SERVICE_NAV_LINKS}
+            footerLink={{ label: "View all services", href: "/services" }}
+          />
 
           {navLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => {
-                if (item.href === "/contact" && pathname === "/contact") {
-                  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-                }
-              }}
-              className="text-foreground rounded-md px-3 py-2 text-sm font-semibold transition-colors hover:text-[#905bf4] active:text-[#905bf4]"
-            >
+            <Link key={item.href} href={item.href} className={navLinkClass}>
               {item.label}
             </Link>
           ))}
+
+          <NavDropdown label="Why us" href="/why-us" buttonLabel="About pages" items={ABOUT_NAV_LINKS} widthClass="w-[20rem]" />
+
+          <Link
+            href="/contact"
+            onClick={() => {
+              if (pathname === "/contact") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            }}
+            className={navLinkClass}
+          >
+            Contact
+          </Link>
           <Link
             href="/contact#enquiry-form"
             onClick={() => {

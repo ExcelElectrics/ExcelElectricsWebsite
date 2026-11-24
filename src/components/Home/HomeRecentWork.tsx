@@ -9,7 +9,7 @@ import { projects } from "@/components/Projects/projects-data";
 /** Home page: a selection of projects, styled like the other home sections. */
 export function HomeRecentWork() {
   return (
-    <ElectricsSection id="recent-work" majorSeam>
+    <ElectricsSection id="recent-work">
       <RevealBlock variant="fade-up" className="mx-auto max-w-4xl text-center">
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#905bf4] md:text-xs">Our projects</p>
         <h2 className="text-foreground mt-2 text-2xl font-semibold tracking-tight md:text-3xl">

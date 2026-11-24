@@ -32,7 +32,11 @@ export function WhyUsIntro() {
             Local electricians you can trust at home
           </h2>
           <p className="text-muted mt-4 text-sm leading-relaxed md:text-base">
-            Excel Electrics is the home-facing name of Excel Fire Ltd. We help homeowners across
+            Excel Electrics is the home-facing name of{" "}
+            <Link href="/excel-fire" className="font-medium text-[#905bf4] underline-offset-4 hover:underline">
+              Excel Fire Ltd
+            </Link>
+            . We help homeowners across
             Essex, Suffolk, Cambridgeshire, Hertfordshire and London with everyday electrics, fire
             safety, access systems, garage doors and EV charging.
           </p>

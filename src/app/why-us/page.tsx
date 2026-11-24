@@ -4,6 +4,7 @@ import { WhyUsIntro } from "@/components/Electrics/WhyUs/WhyUsIntro";
 import { WhyUsReasons } from "@/components/Electrics/WhyUs/WhyUsReasons";
 import { WhyUsPeople } from "@/components/Electrics/WhyUs/WhyUsPeople";
 import { ServiceClosingCta } from "@/components/Electrics/ServiceLanding/ServiceClosingCta";
+import { AccreditationsStrip } from "@/components/Accreditations/AccreditationsStrip";
 import { breadcrumbJsonLd, buildPageMetadata, JsonLd } from "@/lib/seo";
 
 const title = "Why Us";
@@ -30,6 +31,7 @@ export default function WhyUsPage() {
       <WhyUsHero />
       <WhyUsIntro />
       <WhyUsReasons />
+      <AccreditationsStrip />
       <WhyUsPeople />
       <ServiceClosingCta
         title="Ready when you are"
