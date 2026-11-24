@@ -45,3 +45,21 @@ export const SERVICE_NAV_LINKS = [
     blurb: "Home EV charger installs, repairs, upgrades and load advice.",
   },
 ] as const satisfies readonly ServiceNavItem[];
+
+/** "Why us" dropdown: about pages, including the link across to Excel Fire. */
+export const ABOUT_NAV_LINKS: ServiceNavItem[] = [
+  {
+    label: "Why choose us",
+    href: "/why-us",
+    imageSrc: "/ExcelElectrics/photos/why-us-levelling-back-box.webp",
+    imageAlt: "Excel Electrics engineer levelling a back box",
+    blurb: "Who we are, how we work and the people who turn up.",
+  },
+  {
+    label: "Excel Fire",
+    href: "/excel-fire",
+    imageSrc: "/ExcelElectrics/photos/projects/emirates/emirates-stadium.webp",
+    imageAlt: "The Emirates Stadium, an Excel Fire project",
+    blurb: "Our fire safety side: fire doors, fire stopping and inspections.",
+  },
+];
